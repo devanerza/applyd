@@ -1,48 +1,29 @@
-import { Button } from "@/Components/ui/button"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenuButton,
-  SidebarHeader,
-} from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, Table2Icon, Calendar1Icon } from "lucide-react"
- 
+import { LayoutDashboardIcon, Table2Icon, Calendar1Icon } from "lucide-react";
+
 export function AppSidebar() {
-  return (
-    <Sidebar variants="float">
-      <SidebarContent className="px-5 pt-2">
-        <SidebarHeader>
-              <h1 className="font-bold text-2xl">Stride</h1>
-            </SidebarHeader>
-        <SidebarGroup>
-            <SidebarGroupLabel>Menu</SidebarGroupLabel>
-            <SidebarGroupContent asChild>
-              <a href="">
-                <Button variant="ghost" className="w-full justify-start px-2 rounded-lg">
-                  <LayoutDashboardIcon />
-                  Dashboard
-                </Button>
-              </a>
-              <a href="">
-                <Button variant="ghost" className="w-full justify-start px-2 rounded-lg">
-                  <Table2Icon />
-                  Application
-                </Button>
-              </a>
-              <a href="">
-                <Button variant="ghost" className="w-full justify-start px-2 rounded-lg">
-                  <Calendar1Icon />
-                  Follow-up
-                </Button>
-              </a>
-            </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter />
-    </Sidebar>
-  )
+    return (
+        <aside className="bg-base-200 w-64 min-h-screen p-4">
+            <h1 className="font-bold text-2xl mb-6">Stride</h1>
+            <ul className="menu w-full">
+                <li>
+                    <a href={route('dashboard')}>
+                        <LayoutDashboardIcon className="w-4 h-4" />
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href={route('applications.index')}>
+                        <Table2Icon className="w-4 h-4" />
+                        Applications
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <Calendar1Icon className="w-4 h-4" />
+                        Follow-up
+                    </a>
+                </li>
+            </ul>
+        </aside>
+    );
 }

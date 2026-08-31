@@ -1,72 +1,55 @@
-"use client"
-
 import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/Components/ui/table"
-
-// Removed TypeScript interfaces and generics
 export function DataTable({ columns, data }) {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
+    const table = useReactTable({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+    });
 
-  return (
-    <div className="p-3 overflow-hidden rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
-  )
+    return (
+        <div className="overflow-x-auto">
+            <table className="table">
+                <thead>
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <tr key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => (
+                                <th key={header.id}>
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+                <tbody>
+                    {table.getRowModel().rows?.length ? (
+                        table.getRowModel().rows.map((row) => (
+                            <tr key={row.id}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <td key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={columns.length} className="text-center h-24">
+                                No results.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+    );
 }
