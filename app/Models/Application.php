@@ -15,6 +15,13 @@ class Application extends Model
         'job_url',
         'status',
         'applied_at',
+        'location',
+        'employment_type',
+        'salary_range',
+        'source',
+        'resume_version',
+        'cover_letter_version',
+        'notes',
     ];
 
     protected $casts = [
@@ -26,5 +33,20 @@ class Application extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class)->orderBy('activity_date', 'desc');
+    }
+
+    public function documents()
+    {
+        return $this->belongsToMany(Document::class);
+    }
+
+    public function latestActivity()
+    {
+        return $this->activities()->first();
     }
 }
