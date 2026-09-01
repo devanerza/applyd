@@ -6,9 +6,9 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\DocumentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/dashboard', [ApplicationController::class, 'index'])
-->middleware(['auth', 'verified'])
-->name('dashboard');
+Route::get('/dashboard', [ApplicationController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
