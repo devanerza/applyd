@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\DocumentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [ApplicationController::class, 'index'])
@@ -16,10 +18,13 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('applications', ApplicationController::class);
-    Route::patch('/applications/{application}/status', [ApplicationController::class, 'statusUpdate'])
-        ->name('applications.statusUpdate');
-    Route::patch('/applications/{application}/follow-up', [ApplicationController::class, 'followUp'])
-        ->name('applications.followUp');
+
+    Route::post('applications/{application}/activities', [ActivityController::class, 'store'])
+        ->name('applications.activities.store');
+    Route::delete('activities/{activity}', [ActivityController::class, 'destroy'])
+        ->name('activities.destroy');
+
+    Route::resource('documents', DocumentController::class)->except(['show', 'edit', 'update']);
 });
 
 require __DIR__.'/auth.php';
