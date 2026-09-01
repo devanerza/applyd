@@ -3,33 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Activity;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Carbon\Carbon;
 use Inertia\Inertia;
 
 class ApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        $applications = Application::where('user_id', auth()->id())
-        ->orderBy('last_activity_at', 'desc')
-        ->paginate(10)
-        ->withQueryString();
+        $query = Application::where('user_id', auth()->id());
 
-        $currentTime = Carbon::now();
-        $dateOnly = $currentTime->toDateString();
-        foreach ($applications as $application) {
-            if ($dateOnly > $application->follow_up_at) {
-                $application->follow_up_at = null;
-                $application->reminder_sent = false;
-            }
-            $application->save();
-        };
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('company_name', 'like', "%{$search}%")
+                  ->orWhere('role_title', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($source = $request->input('source')) {
+            $query->where('source', $source);
+        }
+
+        $applications = $query->orderBy('last_activity_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('Applications/Index', [
             'applications' => $applications,
-            'filters' => $request->only(['search', 'status', 'sort', 'direction']) // Pass filters back to keep UI state
+            'filters' => $request->only(['search', 'status', 'source']),
         ]);
     }
 
@@ -38,10 +43,55 @@ class ApplicationController extends Controller
         return Inertia::render('Applications/Create');
     }
 
-    public function edit($id)
+    public function store(Request $request)
     {
-        $application = Application::findOrFail($id);
+        $validated = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'role_title' => 'required|string|max:255',
+            'job_url' => 'nullable|url|max:255',
+            'location' => 'nullable|string|max:255',
+            'employment_type' => 'nullable|in:full_time,part_time,internship,contract,freelance',
+            'salary_range' => 'nullable|string|max:255',
+            'source' => 'nullable|in:linkedin,company_website,job_board,referral,other',
+            'resume_version' => 'nullable|string|max:255',
+            'cover_letter_version' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
+            'applied_at' => 'required|date',
+            'status' => 'in:applied,screening,interviewing,offer,rejected,withdrawn,ghosted',
+        ]);
 
+        $application = Application::create([
+            ...$validated,
+            'user_id' => auth()->id(),
+            'last_activity_at' => now(),
+        ]);
+
+        Activity::create([
+            'application_id' => $application->id,
+            'user_id' => auth()->id(),
+            'type' => 'application_submitted',
+            'title' => "Application submitted to {$application->company_name}",
+            'activity_date' => now()->toDateString(),
+        ]);
+
+        return redirect()->route('applications.index')->with('success', 'Application created successfully.');
+    }
+
+    public function show(Application $application)
+    {
+        if ($application->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $application->load('activities', 'documents');
+
+        return Inertia::render('Applications/Show', [
+            'application' => $application,
+        ]);
+    }
+
+    public function edit(Application $application)
+    {
         if ($application->user_id !== auth()->id()) {
             abort(403);
         }
@@ -49,37 +99,6 @@ class ApplicationController extends Controller
         return Inertia::render('Applications/Edit', [
             'application' => $application,
         ]);
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'company_name' => 'required|string|max:255',
-            'role_title' => 'required|string|max:255',
-            'job_url' => 'nullable|active_url|max:255',
-            'status' => 'required|in:applied,screening,interviewing,offer,rejected,ghosted',
-            'applied_at' => 'required|date',
-        ], [
-            'job_url.active_url' => 'invalid or inactive URL'
-        ]);
-
-        $application = new Application($validated);
-        $application->user_id = auth()->id();
-        $application->last_activity_at = now();
-        $application->save();
-
-        return redirect()->route('applications.index')->with('success', 'Application created successfully.');
-    }
-
-    public function destroy(Application $application)
-    {
-        if ($application->user_id !== auth()->id()) {
-            abort(403);
-        }
-
-        $application->delete();
-
-        return redirect()->route('applications.index')->with('success', 'Application deleted successfully.');
     }
 
     public function update(Request $request, Application $application)
@@ -91,74 +110,46 @@ class ApplicationController extends Controller
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'role_title' => 'required|string|max:255',
-            'job_url' => 'nullable|active_url|max:255',
-            'status' => 'required|in:applied,screening,interviewing,offer,rejected,ghosted',
+            'job_url' => 'nullable|url|max:255',
+            'location' => 'nullable|string|max:255',
+            'employment_type' => 'nullable|in:full_time,part_time,internship,contract,freelance',
+            'salary_range' => 'nullable|string|max:255',
+            'source' => 'nullable|in:linkedin,company_website,job_board,referral,other',
+            'resume_version' => 'nullable|string|max:255',
+            'cover_letter_version' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
             'applied_at' => 'required|date',
-        ],[
-            'job_url.active_url' => 'invalid or inactive URL'
+            'status' => 'in:applied,screening,interviewing,offer,rejected,withdrawn,ghosted',
         ]);
+
+        $oldStatus = $application->status;
 
         $application->update([
             ...$validated,
             'last_activity_at' => now(),
         ]);
 
+        if ($oldStatus !== $application->status) {
+            Activity::create([
+                'application_id' => $application->id,
+                'user_id' => auth()->id(),
+                'type' => 'status_change',
+                'title' => "Status changed from {$oldStatus} to {$application->status}",
+                'activity_date' => now()->toDateString(),
+            ]);
+        }
+
         return redirect()->route('applications.index')->with('success', 'Application updated successfully.');
     }
-    
-    public function statusUpdate(Request $request, Application $application)
+
+    public function destroy(Application $application)
     {
         if ($application->user_id !== auth()->id()) {
             abort(403);
         }
 
-        $validated = $request->validate([
-            'status' => 'required|in:applied,screening,interviewing,offer,rejected,ghosted',
-        ]);
+        $application->delete();
 
-        $application->status = $validated['status'];
-        $application->last_activity_at = now();
-
-        if ($application->status == 'offer' || $application->status == 'rejected' || $application->status == 'ghosted') {
-            $application->follow_up_at = null;
-        }
-
-        $application->save();
-
-        return redirect()->route('applications.index')->with('success', 'Application status updated successfully.');
-    }
-    
-    public function followUp(Request $request, Application $application)
-    {
-        if ($application->user_id !== auth()->id()) {
-            abort(403);
-        }
-
-
-        $validated = $request->validate([
-            'follow_up_at' => 'nullable|date'
-        ]);
-
-        $followUpAt = Carbon::parse($validated['follow_up_at']);
-        $present = Carbon::now();
-        $dateOnly = $present->toDateString();
-
-        if ($followUpAt < $dateOnly) {
-            throw ValidationException::withMessages([
-                'invalid_follow_up_date' => 'follow up must be in the future!'
-            ])->errorBag("application_{$application->id}");
-        }
-
-        $application->follow_up_at = $validated['follow_up_at'];
-        $application->last_activity_at = now();
-
-        if ($application->status == 'offer' || $application->status == 'rejected' || $application->status == 'ghosted') {
-            $application->follow_up_at = null;
-        }
-        
-
-        $application->save();
-
-        return redirect()->route('applications.index')->with('success', 'Application follow up updated successfully.');
+        return redirect()->route('applications.index')->with('success', 'Application deleted successfully.');
     }
 }
