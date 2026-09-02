@@ -9,6 +9,11 @@ use Inertia\Inertia;
 
 class ApplicationController extends Controller
 {
+    public function dashboard()
+    {
+        return Inertia::render('Dashboard/Index');
+    }
+
     public function index(Request $request)
     {
         $query = Application::where('user_id', auth()->id());
