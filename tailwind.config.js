@@ -13,7 +13,9 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                sans: ['"Roboto Flex"', 'system-ui', '-apple-system', 'sans-serif'],
+                headline: ['"Google Sans Flex"', 'system-ui', '-apple-system', 'sans-serif'],
+                label: ['"Space Mono"', 'ui-monospace', 'monospace'],
             },
         },
     },
@@ -27,12 +29,14 @@ export default {
                     'primary': '#5425D4',
                     'primary-content': '#ffffff',
                     'secondary': '#70FBC1',
-                    'secondary-content': '#007350',
+                    'secondary-content': '#03633B',
                     'accent': '#DFD3FB',
                     'accent-content': '#5425D4',
-                    'neutral': "#E8E8E8",
+                    'neutral': '#E8E8E8',
+                    'neutral-content': '#1f2937',
                     'info': '#3b82f6',
                     'warning': '#FAF0B3',
+                    'warning-content': '4F4A28',
                     'error': '#FFDAD6',
                 },
             },
