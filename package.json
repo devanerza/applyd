@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "@tanstack/react-table": "^8.21.3",
-        "daisyui": "^5.7.22",
+        "daisyui": "^4.12.24",
         "date-fns": "^4.1.0",
         "lucide-react": "^0.562.0"
     }
