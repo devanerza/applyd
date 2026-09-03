@@ -52,7 +52,7 @@ export function AppSidebar() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex items-center gap-3 rounded-full px-4 py-3 font-label text-sm transition-colors ${
+                            className={`flex items-center gap-3 rounded-full px-4 py-3 font-body text-sm transition-colors ${
                                 active
                                     ? 'bg-secondary text-secondary-content font-semibold'
                                     : 'text-base-content/60 hover:bg-secondary/30'
