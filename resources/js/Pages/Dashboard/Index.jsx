@@ -109,7 +109,7 @@ export default function Dashboard() {
                         return (
                             <div
                                 key={stat.label}
-                                className={`flex items-center gap-4 rounded-full ${stat.bg} px-6 py-5`}
+                                className={`flex items-center gap-4 rounded-3xl ${stat.bg} px-6 py-5`}
                             >
                                 <div
                                     className={`flex h-10 w-10 items-center justify-center rounded-full ${stat.iconBg}`}
@@ -118,13 +118,13 @@ export default function Dashboard() {
                                 </div>
                                 <div>
                                     <p
-                                        className={`font-label text-sm tracking-wide uppercase ${stat.labelColor ??
+                                        className={`font-headline text-sm font-bold tracking-wide uppercase ${stat.labelColor ??
                                             'text-gray-700'
                                             }`}
                                     >
                                         {stat.label}
                                     </p>
-                                    <p className="font-headline text-2xl font-bold text-gray-900">
+                                    <p className="font-body text-md text-gray-900">
                                         {String(stat.value).padStart(
                                             2,
                                             '0',
@@ -163,7 +163,7 @@ export default function Dashboard() {
                                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
                                             <Building2 className="h-5 w-5 text-primary" />
                                         </div>
-                                        <span className="rounded-full bg-primary/20 px-3 py-1 font-label text-xs tracking-wide uppercase text-primary">
+                                        <span className="rounded-full bg-primary/20 px-3 py-1 font-label font-bold text-[10px] tracking-wide uppercase text-primary">
                                             {app.status}
                                         </span>
                                     </div>
@@ -176,19 +176,14 @@ export default function Dashboard() {
                                     </p>
 
                                     <div className="mt-4 flex items-center justify-between">
-                                        <span className="font-label flex items-center gap-1 text-xs font-medium text-amber-700">
-                                            <AlertTriangle className="h-3.5 w-3.5" />
-                                            Needs Attention
-                                        </span>
-                                        <Link
-                                            href={route(
-                                                'applications.show',
-                                                app.id,
-                                            )}
-                                            className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/70"
-                                        >
-                                            <ArrowRight className="h-4 w-4" />
-                                        </Link>
+                                        <div className="flex items-center gap-2">
+                                            <button className="font-body rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-content hover:bg-primary/80 transition-colors">
+                                                Follow up
+                                            </button>
+                                            <button className="font-body rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors">
+                                                Ignore
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -203,7 +198,7 @@ export default function Dashboard() {
                         </h2>
 
                         <div className="rounded-3xl bg-secondary p-5 text-secondary-content">
-                            <span className="font-label rounded-md bg-secondary-content/20 px-2 py-1 text-[10px] text-secondary-content font-bold tracking-wide uppercase">
+                            <span className="font-label rounded-full bg-secondary-content/20 px-2 py-1 text-[10px] text-secondary-content font-bold tracking-wide uppercase">
                                 {upcoming.type}
                             </span>
 
