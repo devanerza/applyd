@@ -1,4 +1,4 @@
-import { Link, usePage, useRouter } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard,
     Briefcase,
@@ -11,7 +11,6 @@ import {
 
 export function AppSidebar() {
     const { url } = usePage();
-    const router = useRouter();
     const user = usePage().props.auth.user;
 
     const menuItems = [
