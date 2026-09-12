@@ -62,9 +62,16 @@ class ApplicationController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $filters = [
+            ['label' => 'Status', 'hasDropdown' => true],
+            ['label' => 'Source', 'hasDropdown' => true],
+            ['label' => 'Follow-up Due', 'active' => $request->filled('follow_up_due')],
+            ['label' => 'Ghosted', 'active' => $request->input('status') === 'ghosted'],
+        ];
+
         return Inertia::render('Applications/Index', [
             'applications' => $applications,
-            'filters' => $request->only(['search', 'status', 'source']),
+            'filters' => $filters,
         ]);
     }
 
