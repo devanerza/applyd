@@ -1,5 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import FollowUpModal from './Components/FollowUpModal';
 import {
     Building2,
     Calendar,
@@ -50,6 +51,12 @@ export default function Show({ application }) {
     return (
         <AuthenticatedLayout>
             <Head title={`${application.company_name} - ${application.role_title}`} />
+
+            <FollowUpModal
+                application={application}
+                show={showFollowUpModal}
+                onClose={() => setShowFollowUpModal(false)}
+            />
 
             <div className="px-10 py-8">
                 {/* Breadcrumb */}

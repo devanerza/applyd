@@ -96,6 +96,10 @@ class ApplicationController extends Controller
 
         return Inertia::render('Applications/Show', [
             'application' => $application,
+            'nextAction' => [
+                'title' => 'Follow up in 2 days',
+                'description' => 'Send a polite check-in email to the hiring manager.',
+            ],
         ]);
     }
 
