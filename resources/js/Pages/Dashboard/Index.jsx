@@ -1,17 +1,36 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {
     Search,
     CheckCircle2,
     MessageCircle,
     AlertTriangle,
-    ArrowRight,
     Building2,
     CalendarClock,
 } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Dashboard({ summary, needsAttention }) {
     const user = usePage().props.auth.user;
+
+    const [search, setSearch] = useState('');
+    const [ignoredIds, setIgnoredIds] = useState([]);
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        router.get(route('applications.index'), { search }, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
+
+    const handleIgnore = (id) => {
+        setIgnoredIds((prev) => [...prev, id]);
+    };
+
+    const visible = (needsAttention ?? []).filter(
+        (app) => !ignoredIds.includes(app.id)
+    );
 
     const stats = [
         {
@@ -60,6 +79,9 @@ export default function Dashboard({ summary, needsAttention }) {
                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                             <input
                                 type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit(e)}
                                 placeholder="Search applications..."
                                 className="w-full rounded-full border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm outline-none focus:border-indigo-400"
                             />
@@ -119,53 +141,68 @@ export default function Dashboard({ summary, needsAttention }) {
                         </div>
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            {needsAttention?.map((app) => (
-                                <div
-                                    key={app.id}
-                                    className="rounded-3xl bg-accent p-5"
-                                >
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
-                                            <Building2 className="h-5 w-5 text-primary" />
-                                        </div>
-                                        <span className="rounded-full bg-primary/20 px-3 py-1 font-label font-bold text-[10px] tracking-wide uppercase text-primary">
-                                            {app.status}
-                                        </span>
-                                    </div>
-
-                                    <p className="font-headline mt-4 font-bold text-indigo-900">
-                                        {app.role_title}
-                                    </p>
-                                    <p className="text-sm text-indigo-800/80">
-                                        {app.company_name}
-                                    </p>
-
-                                    <div className="mt-4 flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <Link
-                                                href={route('applications.show', app.id)}
-                                                className={`font-body rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-                                                    app.recruiter_name ||
-                                                    app.recruiter_email
-                                                        ? 'bg-primary text-primary-content hover:bg-primary/80'
-                                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
-                                                }`}
-                                                title={
-                                                    app.recruiter_name ||
-                                                    app.recruiter_email
-                                                        ? ''
-                                                        : 'Add recruiter contact to enable follow-ups'
-                                                }
-                                            >
-                                                Follow up
-                                            </Link>
-                                            <button className="font-body rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors">
-                                                Ignore
-                                            </button>
-                                        </div>
-                                    </div>
+                            {visible.length === 0 ? (
+                                <div className="col-span-2 rounded-3xl border-2 border-dashed border-gray-300 p-8 text-center">
+                                    <p className="mb-2 text-lg font-bold text-gray-700">No applications need attention</p>
+                                    <Link
+                                        href={route('applications.create')}
+                                        className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90"
+                                    >
+                                        Create application
+                                    </Link>
                                 </div>
-                            ))}
+                            ) : (
+                                visible.map((app) => (
+                                    <div
+                                        key={app.id}
+                                        className="rounded-3xl bg-accent p-5"
+                                    >
+                                        <div className="flex items-start justify-between">
+                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
+                                                <Building2 className="h-5 w-5 text-primary" />
+                                            </div>
+                                            <span className="rounded-full bg-primary/20 px-3 py-1 font-label font-bold text-[10px] tracking-wide uppercase text-primary">
+                                                {app.status}
+                                            </span>
+                                        </div>
+
+                                        <p className="font-headline mt-4 font-bold text-indigo-900">
+                                            {app.role_title}
+                                        </p>
+                                        <p className="text-sm text-indigo-800/80">
+                                            {app.company_name}
+                                        </p>
+
+                                        <div className="mt-4 flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <Link
+                                                    href={route('applications.show', app.id)}
+                                                    className={`font-body rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                                                        app.recruiter_name ||
+                                                        app.recruiter_email
+                                                            ? 'bg-primary text-primary-content hover:bg-primary/80'
+                                                            : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                                                    }`}
+                                                    title={
+                                                        app.recruiter_name ||
+                                                        app.recruiter_email
+                                                            ? ''
+                                                            : 'Add recruiter contact to enable follow-ups'
+                                                    }
+                                                >
+                                                    Follow up
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleIgnore(app.id)}
+                                                    className="font-body rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors"
+                                                >
+                                                    Ignore
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
 
