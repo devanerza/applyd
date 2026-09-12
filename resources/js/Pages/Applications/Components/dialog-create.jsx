@@ -10,6 +10,10 @@ export function CreateApplicationDialog() {
         job_url: '',
         applied_at: new Date().toISOString().split('T')[0],
         status: 'applied',
+        recruiter_name: '',
+        recruiter_email: '',
+        recruiter_phone: '',
+        recruiter_linkedin: '',
     });
 
     const handleSubmit = (e) => {
@@ -32,12 +36,12 @@ export function CreateApplicationDialog() {
                 <dialog className="modal modal-open">
                     <div className="modal-box">
                         <form onSubmit={handleSubmit}>
-                            <h3 className="font-bold text-lg">Fill your application details</h3>
+                            <h3 className="font-headline font-bold text-lg">Fill your application details</h3>
 
                             <div className="space-y-4 py-4">
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text">Company Name</span>
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Company Name</span>
                                     </label>
                                     <input
                                         type="text"
@@ -53,7 +57,7 @@ export function CreateApplicationDialog() {
 
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text">Role Title</span>
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Role Title</span>
                                     </label>
                                     <input
                                         type="text"
@@ -69,7 +73,7 @@ export function CreateApplicationDialog() {
 
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text">Job URL</span>
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Job URL</span>
                                     </label>
                                     <input
                                         type="url"
@@ -85,7 +89,7 @@ export function CreateApplicationDialog() {
 
                                 <div className="form-control">
                                     <label className="label">
-                                        <span className="label-text">Date Applied</span>
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Date Applied</span>
                                     </label>
                                     <input
                                         type="date"
@@ -93,6 +97,75 @@ export function CreateApplicationDialog() {
                                         value={data.applied_at}
                                         onChange={(e) => setData('applied_at', e.target.value)}
                                     />
+                                </div>
+
+                                {/* Recruiter Contact Section */}
+                                <div className="divider mt-6 mb-4">
+                                    <span className="text-xs font-semibold text-gray-500 uppercase">Recruiter Contact (Optional)</span>
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Recruiter Name</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="input input-bordered"
+                                        value={data.recruiter_name}
+                                        onChange={(e) => setData('recruiter_name', e.target.value)}
+                                        placeholder="e.g John Smith"
+                                    />
+                                    {errors.recruiter_name && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.recruiter_name}</p>
+                                    )}
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Recruiter Email</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        className="input input-bordered"
+                                        value={data.recruiter_email}
+                                        onChange={(e) => setData('recruiter_email', e.target.value)}
+                                        placeholder="e.g john@company.com"
+                                    />
+                                    {errors.recruiter_email && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.recruiter_email}</p>
+                                    )}
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Recruiter Phone</span>
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        className="input input-bordered"
+                                        value={data.recruiter_phone}
+                                        onChange={(e) => setData('recruiter_phone', e.target.value)}
+                                        placeholder="e.g +1-555-0123"
+                                    />
+                                    {errors.recruiter_phone && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.recruiter_phone}</p>
+                                    )}
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Recruiter LinkedIn</span>
+                                    </label>
+                                    <input
+                                        type="url"
+                                        className="input input-bordered"
+                                        value={data.recruiter_linkedin}
+                                        onChange={(e) => setData('recruiter_linkedin', e.target.value)}
+                                        placeholder="e.g https://linkedin.com/in/johnsmith"
+                                    />
+                                    {errors.recruiter_linkedin && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.recruiter_linkedin}</p>
+                                    )}
                                 </div>
                             </div>
 
