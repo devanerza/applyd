@@ -25,6 +25,10 @@ Route::middleware('auth')->group(function () {
         ->name('activities.destroy');
 
     Route::resource('documents', DocumentController::class)->except(['show', 'edit', 'update']);
+
+    Route::get('/insights', function () {
+        return inertia('Insights/Index');
+    })->name('insights.index');
 });
 
 require __DIR__.'/auth.php';

@@ -4,7 +4,7 @@ export default function GuestLayout({ children }) {
     return (
         <div className="flex min-h-screen flex-col items-center bg-base-200 pt-6 sm:justify-center sm:pt-0">
             <div>
-                <Link href="/" className="text-3xl font-bold">
+                <Link href="/" className="font-headline text-3xl font-bold">
                     Stride
                 </Link>
             </div>

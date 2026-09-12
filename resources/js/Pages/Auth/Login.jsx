@@ -28,7 +28,7 @@ export default function Login({ status, canResetPassword }) {
             <form onSubmit={submit} className="space-y-4">
                 <div className="form-control">
                     <label className="label">
-                        <span className="label-text">Email</span>
+                        <span className="label-text font-label text-xs tracking-wide uppercase">Email</span>
                     </label>
                     <input
                         type="email"
@@ -43,7 +43,7 @@ export default function Login({ status, canResetPassword }) {
 
                 <div className="form-control">
                     <label className="label">
-                        <span className="label-text">Password</span>
+                        <span className="label-text font-label text-xs tracking-wide uppercase">Password</span>
                     </label>
                     <input
                         type="password"
@@ -63,7 +63,7 @@ export default function Login({ status, canResetPassword }) {
                             checked={data.remember}
                             onChange={(e) => setData('remember', e.target.checked)}
                         />
-                        <span className="label-text">Remember me</span>
+                        <span className="label-text font-label text-xs tracking-wide uppercase">Remember me</span>
                     </label>
                 </div>
 

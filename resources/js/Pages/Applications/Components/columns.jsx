@@ -30,8 +30,8 @@ export const columns = [
             const application = row.original;
             return (
                 <div className="py-3">
-                    <h2 className="text-lg font-bold">{application.role_title}</h2>
-                    <p className="text-sm">{application.company_name}</p>
+                    <h2 className="font-headline text-lg font-bold">{application.role_title}</h2>
+                    <p className="font-label text-xs tracking-wide uppercase text-gray-500">{application.company_name}</p>
                 </div>
             );
         },

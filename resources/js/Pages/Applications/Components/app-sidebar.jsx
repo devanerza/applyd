@@ -8,10 +8,13 @@ import {
     LogOutIcon,
     UserIcon,
 } from 'lucide-react';
+import { useState } from 'react';
+import AddApplicationModal from './AddApplicationModal';
 
 export function AppSidebar() {
     const { url } = usePage();
     const user = usePage().props.auth.user;
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const menuItems = [
         { href: route('dashboard'), label: 'Dashboard', icon: LayoutDashboard },
@@ -41,13 +44,14 @@ export function AppSidebar() {
                 </div>
             </div>
 
-            <Link
-                href={route('applications.create')}
-                className="mb-6 flex items-center justify-center gap-2 rounded-full bg-primary py-3 font-headline text-sm font-semibold text-primary-content hover:bg-primary/80 transition-colors"
+            <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className="mb-6 flex items-center justify-center gap-2 rounded-full bg-primary py-3 font-headline text-sm font-semibold text-primary-content hover:bg-primary/80 transition-colors w-full"
             >
                 <Plus className="h-4 w-4" />
                 Add Application
-            </Link>
+            </button>
 
             <nav className="space-y-1">
                 {menuItems.map((item) => {
@@ -90,6 +94,11 @@ export function AppSidebar() {
                     Logout
                 </button>
             </nav>
+
+            <AddApplicationModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+            />
         </aside>
     );
 }
