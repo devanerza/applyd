@@ -49,12 +49,15 @@ export default function Dashboard() {
             role: 'Backend Developer',
             company: 'Acme Corp',
             status: 'Applied',
+            recruiter_name: 'John Smith',
         },
         {
             id: 2,
             role: 'Backend Developer',
             company: 'Acme Corp',
             status: 'Applied',
+            recruiter_name: null,
+            recruiter_email: null,
         },
     ];
 
@@ -177,9 +180,21 @@ export default function Dashboard() {
 
                                     <div className="mt-4 flex items-center justify-between">
                                         <div className="flex items-center gap-2">
-                                            <button className="font-body rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-content hover:bg-primary/80 transition-colors">
+                                            <Link
+                                                href={route('applications.show', app.id)}
+                                                className={`font-body rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                                                    app.recruiter_name || app.recruiter_email
+                                                        ? 'bg-primary text-primary-content hover:bg-primary/80'
+                                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                                                }`}
+                                                title={
+                                                    app.recruiter_name || app.recruiter_email
+                                                        ? ''
+                                                        : 'Add recruiter contact to enable follow-ups'
+                                                }
+                                            >
                                                 Follow up
-                                            </button>
+                                            </Link>
                                             <button className="font-body rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors">
                                                 Ignore
                                             </button>
