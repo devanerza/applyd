@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-export default function Show({ application }) {
+export default function Show({ application, nextAction }) {
     const [showFollowUpModal, setShowFollowUpModal] = useState(false);
 
     const hasRecruiterContact =
@@ -114,6 +114,16 @@ export default function Show({ application }) {
                             <Plus className="h-4 w-4" />
                             Add activity
                         </button>
+                        <button
+                            onClick={() => {
+                                if (confirm(`Delete ${application.company_name}? This can't be undone.`)) {
+                                    router.delete(route('applications.destroy', application.id));
+                                }
+                            }}
+                            className="flex items-center gap-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
 
@@ -123,9 +133,9 @@ export default function Show({ application }) {
                         <Clock className="h-4 w-4" />
                         Next Action
                     </div>
-                    <h2 className="mb-2 text-2xl font-bold">Follow up in 2 days</h2>
+                    <h2 className="mb-2 text-2xl font-bold">{nextAction?.title ?? 'Nothing to do'}</h2>
                     <p className="mb-4 text-white/90">
-                        Send a polite check-in email to the hiring manager.
+                        {nextAction?.description ?? 'This application needs no action right now.'}
                     </p>
                     <button className="flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-primary hover:bg-white/90">
                         <Mail className="h-4 w-4" />
