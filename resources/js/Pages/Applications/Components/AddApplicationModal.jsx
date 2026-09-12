@@ -42,7 +42,7 @@ export default function AddApplicationModal({ isOpen, onClose }) {
 
     return (
         <>
-            <div className="fixed inset-0 z-50 bg-black/50" onClick={onClose} />
+            <div className="fixed inset-0 z-100 bg-black/50" onClick={onClose} />
             <dialog open className="modal modal-open">
                 <div className="modal-box max-w-2xl max-h-[90vh] overflow-y-auto">
                     <div className="flex items-center justify-between mb-4">

@@ -40,52 +40,54 @@ export default function ApplicationsIndex({ applications, filters }) {
         });
     };
 
-    const getHealth = (app) => {
-        if (!app.recruiter_name && !app.recruiter_email) {
-            return 'attention';
-        }
-        if (['rejected', 'withdrawn', 'ghosted'].includes(app.status)) {
-            return 'ghosted';
-        }
-        return 'healthy';
-    };
-
     const healthStyles = {
-        attention: {
-            card: 'bg-accent',
-            iconWrap: 'bg-white',
-            iconColor: 'text-primary',
-            badge: 'bg-white/80 text-gray-600',
-            title: 'text-primary',
-            subtitle: 'text-primary/60',
-            label: 'text-amber-700',
+        needs_attention: {
+            card: 'bg-warning/20',
+            iconWrap: 'bg-warning',
+            iconColor: 'text-warning-content',
+            badge: 'bg-neutral/10 text-neutral-content',
+            title: 'text-neutral-content',
+            subtitle: 'text-neutral-content/70',
+            label: 'text-warning',
             labelIcon: AlertTriangle,
             labelText: 'Needs Attention',
-            action: 'bg-indigo-600 hover:bg-indigo-700',
+            action: 'bg-warning hover:bg-warning/80 text-warning-content',
         },
         healthy: {
-            card: 'bg-secondary',
-            iconWrap: 'bg-white',
-            iconColor: 'text-secondary-content',
-            badge: 'bg-secondary-content/20 text-secondary-content',
-            title: 'text-secondary-content',
-            subtitle: 'text-secondary-content/60',
-            label: 'text-emerald-950',
+            card: 'bg-success/10',
+            iconWrap: 'bg-success',
+            iconColor: 'text-success-content',
+            badge: 'bg-neutral/10 text-neutral-content',
+            title: 'text-neutral-content',
+            subtitle: 'text-neutral-content/70',
+            label: 'text-success',
             labelIcon: CheckCircle2,
             labelText: 'Healthy',
-            action: 'bg-emerald-600 hover:bg-emerald-700',
+            action: 'bg-success hover:bg-success/80 text-success-content',
+        },
+        stale: {
+            card: 'bg-error/10',
+            iconWrap: 'bg-error/50',
+            iconColor: 'text-error-content',
+            badge: 'bg-neutral/10 text-neutral-content',
+            title: 'text-neutral-content',
+            subtitle: 'text-neutral-content/70',
+            label: 'text-error/70',
+            labelIcon: AlertTriangle,
+            labelText: 'Stale',
+            action: 'bg-error/50 hover:bg-error/60 text-error-content',
         },
         ghosted: {
-            card: 'bg-warning',
-            iconWrap: 'bg-white',
-            iconColor: 'text-warning-content',
-            badge: 'bg-white/70 text-warning-content',
-            title: 'text-warning-content',
-            subtitle: 'text-warning-content/60',
-            label: 'text-red-800',
+            card: 'bg-error/20',
+            iconWrap: 'bg-error',
+            iconColor: 'text-error-content',
+            badge: 'bg-neutral/10 text-neutral-content',
+            title: 'text-neutral-content',
+            subtitle: 'text-neutral-content/70',
+            label: 'text-error',
             labelIcon: Ban,
             labelText: 'Likely Ghosted',
-            action: 'bg-warning-content hover:bg-warning-content/50',
+            action: 'bg-error hover:bg-error/80 text-error-content',
         },
     };
 
@@ -160,14 +162,14 @@ export default function ApplicationsIndex({ applications, filters }) {
                     ) : (
                         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {items.map((app) => {
-                                const health = getHealth(app);
+                                const health = app.health || 'healthy';
                                 const style = healthStyles[health];
                                 const LabelIcon = style.labelIcon;
 
                                 return (
                                     <div
                                         key={app.id}
-                                        className={`rounded-2xl ${style.card} p-5`}
+                                        className={`rounded-2xl ${style.card} p-5 relative`}
                                     >
                                         <div className="flex items-start justify-between">
                                             <div
@@ -178,7 +180,7 @@ export default function ApplicationsIndex({ applications, filters }) {
                                                 />
                                             </div>
                                             <span
-                                                className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${style.badge}`}
+                                                className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${style.badge} capitalize`}
                                             >
                                                 {app.status}
                                             </span>

@@ -76,7 +76,7 @@ export default function Dashboard({ summary, needsAttention }) {
                     </div>
                     <div className="flex items-center justify-end gap-4">
                         <div className="relative w-72">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                            <Search className="absolute left-3 top-1/2 h-4 w-4 z-[-100] -translate-y-1/2 text-gray-400" />
                             <input
                                 type="text"
                                 value={search}

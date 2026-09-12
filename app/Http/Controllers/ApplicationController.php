@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\Activity;
+use App\Actions\DetermineApplicationHealth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -61,6 +62,13 @@ class ApplicationController extends Controller
         $applications = $query->orderBy('last_activity_at', 'desc')
             ->paginate(10)
             ->withQueryString();
+
+        $healthCalculator = new DetermineApplicationHealth();
+        
+        $applications->getCollection()->transform(function ($app) use ($healthCalculator) {
+            $app->health = $healthCalculator->execute($app);
+            return $app;
+        });
 
         $filters = [
             ['label' => 'Status', 'hasDropdown' => true],
