@@ -63,6 +63,10 @@ class ApplicationController extends Controller
             'notes' => 'nullable|string',
             'applied_at' => 'required|date',
             'status' => 'in:applied,screening,interviewing,offer,rejected,withdrawn,ghosted',
+            'recruiter_name' => 'nullable|string|max:255',
+            'recruiter_email' => 'nullable|email|max:255',
+            'recruiter_phone' => 'nullable|string|max:50',
+            'recruiter_linkedin' => 'nullable|url|max:255',
         ]);
 
         $application = Application::create([
@@ -125,6 +129,10 @@ class ApplicationController extends Controller
             'notes' => 'nullable|string',
             'applied_at' => 'required|date',
             'status' => 'in:applied,screening,interviewing,offer,rejected,withdrawn,ghosted',
+            'recruiter_name' => 'nullable|string|max:255',
+            'recruiter_email' => 'nullable|email|max:255',
+            'recruiter_phone' => 'nullable|string|max:50',
+            'recruiter_linkedin' => 'nullable|url|max:255',
         ]);
 
         $oldStatus = $application->status;

@@ -22,6 +22,10 @@ class Application extends Model
         'resume_version',
         'cover_letter_version',
         'notes',
+        'recruiter_name',
+        'recruiter_email',
+        'recruiter_phone',
+        'recruiter_linkedin',
     ];
 
     protected $casts = [
@@ -48,5 +52,10 @@ class Application extends Model
     public function latestActivity()
     {
         return $this->activities()->first();
+    }
+
+    public function hasRecruiterContact()
+    {
+        return !empty($this->recruiter_name) || !empty($this->recruiter_email);
     }
 }
