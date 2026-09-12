@@ -10,6 +10,7 @@ class Application extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'company_name',
         'role_title',
         'job_url',
@@ -22,6 +23,8 @@ class Application extends Model
         'resume_version',
         'cover_letter_version',
         'notes',
+        'last_activity_at',
+        'follow_up_at',
         'recruiter_name',
         'recruiter_email',
         'recruiter_phone',
