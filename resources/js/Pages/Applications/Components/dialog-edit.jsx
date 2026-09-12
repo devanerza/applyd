@@ -10,6 +10,13 @@ export function EditApplicationDialog({ application }) {
         job_url: application?.job_url || '',
         applied_at: application?.applied_at || new Date().toISOString().split('T')[0],
         status: application?.status || 'applied',
+        location: application?.location || '',
+        employment_type: application?.employment_type || '',
+        salary_range: application?.salary_range || '',
+        source: application?.source || '',
+        resume_version: application?.resume_version || '',
+        cover_letter_version: application?.cover_letter_version || '',
+        notes: application?.notes || '',
         recruiter_name: application?.recruiter_name || '',
         recruiter_email: application?.recruiter_email || '',
         recruiter_phone: application?.recruiter_phone || '',
@@ -102,6 +109,111 @@ export function EditApplicationDialog({ application }) {
                                         className="input input-bordered"
                                         value={data.applied_at}
                                         onChange={(e) => setData('applied_at', e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Application Details Section */}
+                                <div className="divider mt-6 mb-4">
+                                    <span className="text-xs font-semibold text-gray-500 uppercase">Application Details</span>
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Location</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="input input-bordered"
+                                        value={data.location}
+                                        onChange={(e) => setData('location', e.target.value)}
+                                        placeholder="e.g Remote / New York"
+                                    />
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Employment Type</span>
+                                    </label>
+                                    <select
+                                        className="select select-bordered"
+                                        value={data.employment_type}
+                                        onChange={(e) => setData('employment_type', e.target.value)}
+                                    >
+                                        <option value="">Select type</option>
+                                        <option value="full_time">Full-time</option>
+                                        <option value="part_time">Part-time</option>
+                                        <option value="internship">Internship</option>
+                                        <option value="contract">Contract</option>
+                                        <option value="freelance">Freelance</option>
+                                    </select>
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Salary Range</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="input input-bordered"
+                                        value={data.salary_range}
+                                        onChange={(e) => setData('salary_range', e.target.value)}
+                                        placeholder="e.g $80k-$100k"
+                                    />
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Source</span>
+                                    </label>
+                                    <select
+                                        className="select select-bordered"
+                                        value={data.source}
+                                        onChange={(e) => setData('source', e.target.value)}
+                                    >
+                                        <option value="">Select source</option>
+                                        <option value="linkedin">LinkedIn</option>
+                                        <option value="company_website">Company Website</option>
+                                        <option value="job_board">Job Board</option>
+                                        <option value="referral">Referral</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Resume Version</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="input input-bordered"
+                                        value={data.resume_version}
+                                        onChange={(e) => setData('resume_version', e.target.value)}
+                                        placeholder="e.g Resume v3"
+                                    />
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Cover Letter Version</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="input input-bordered"
+                                        value={data.cover_letter_version}
+                                        onChange={(e) => setData('cover_letter_version', e.target.value)}
+                                        placeholder="e.g Cover letter v1"
+                                    />
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-label text-xs tracking-wide uppercase">Notes</span>
+                                    </label>
+                                    <textarea
+                                        className="textarea textarea-bordered"
+                                        value={data.notes}
+                                        onChange={(e) => setData('notes', e.target.value)}
+                                        placeholder="Any notes..."
                                     />
                                 </div>
 
