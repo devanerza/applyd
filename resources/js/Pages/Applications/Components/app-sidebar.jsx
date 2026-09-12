@@ -1,13 +1,18 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, useRouter } from '@inertiajs/react';
 import {
     LayoutDashboard,
     Briefcase,
     TrendingUp,
     Plus,
+    FolderOpen,
+    LogOutIcon,
+    UserIcon,
 } from 'lucide-react';
 
 export function AppSidebar() {
     const { url } = usePage();
+    const router = useRouter();
+    const user = usePage().props.auth.user;
 
     const menuItems = [
         { href: route('dashboard'), label: 'Dashboard', icon: LayoutDashboard },
@@ -37,13 +42,13 @@ export function AppSidebar() {
                 </div>
             </div>
 
-            <button
-                type="button"
+            <Link
+                href={route('applications.create')}
                 className="mb-6 flex items-center justify-center gap-2 rounded-full bg-primary py-3 font-headline text-sm font-semibold text-primary-content hover:bg-primary/80 transition-colors"
             >
                 <Plus className="h-4 w-4" />
                 Add Application
-            </button>
+            </Link>
 
             <nav className="space-y-1">
                 {menuItems.map((item) => {
@@ -63,6 +68,28 @@ export function AppSidebar() {
                         </Link>
                     );
                 })}
+                <Link
+                    href={route('documents.index')}
+                    className="flex items-center gap-3 rounded-full px-4 py-3 font-body text-sm text-base-content/60 hover:bg-secondary/30 transition-colors"
+                >
+                    <FolderOpen className="h-4 w-4" />
+                    Documents
+                </Link>
+                <Link
+                    href={route('profile.edit')}
+                    className="flex items-center gap-3 rounded-full px-4 py-3 font-body text-sm text-base-content/60 hover:bg-secondary/30 transition-colors"
+                >
+                    <UserIcon className="h-4 w-4" />
+                    Profile
+                </Link>
+                <button
+                    type="button"
+                    onClick={() => router.post(route('logout'))}
+                    className="flex w-full items-center gap-3 rounded-full px-4 py-3 font-body text-sm text-base-content/60 hover:bg-secondary/30 transition-colors"
+                >
+                    <LogOutIcon className="h-4 w-4" />
+                    Logout
+                </button>
             </nav>
         </aside>
     );
