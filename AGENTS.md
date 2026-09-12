@@ -8,6 +8,8 @@ This document defines the complete rebuild of the Job Application Tracker ("Stri
 
 **Backend architecture:** Controllers stay thin — they handle HTTP concerns only (validation, auth, delegation). Business logic lives in `app/Services/` (e.g. `AnalyticsService`, follow-up/health calculation logic) and `app/Actions/` (single-purpose operations like `DetermineNextAction`, `EvaluateGhostingStatus`). Do not put domain logic in controllers.
 
+**Git workflow:** Commit using [Conventional Commits](https://www.conventionalcommits.org/) format (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, etc.). **Each module/feature gets its own commit** — do not bundle unrelated changes into a single commit. A single response may contain multiple commits if changes span different modules/features. Example: adding a migration + updating a model = 2 commits (`feat: add documents table` + `feat: add documents relationship to Application`).
+
 ---
 
 ## Table of Contents
