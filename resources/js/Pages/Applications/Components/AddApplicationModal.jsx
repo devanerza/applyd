@@ -42,9 +42,9 @@ export default function AddApplicationModal({ isOpen, onClose }) {
 
     return (
         <>
-            <div className="fixed inset-0 z-100 bg-black/50" onClick={onClose} />
-            <dialog open className="modal modal-open">
-                <div className="modal-box max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 z-[9998] bg-black/50" onClick={onClose} />
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                <div className="modal-box max-w-2xl max-h-[90vh] overflow-y-auto bg-white relative">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-bold">Add Application</h3>
                         <button
@@ -361,7 +361,7 @@ export default function AddApplicationModal({ isOpen, onClose }) {
                         </div>
                     </form>
                 </div>
-            </dialog>
+            </div>
         </>
     );
 }
