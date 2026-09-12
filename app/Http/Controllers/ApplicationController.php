@@ -11,7 +11,32 @@ class ApplicationController extends Controller
 {
     public function dashboard()
     {
-        return Inertia::render('Dashboard/Index');
+        $query = Application::where('user_id', auth()->id());
+
+        // ponytail: counts/health are placeholders until Phase 2 wires
+        // real health + next-action derivation; upgrade to Action classes then.
+        $summary = [
+            'active' => (clone $query)
+                ->whereNotIn('status', ['rejected', 'withdrawn', 'ghosted'])
+                ->count(),
+            'waiting' => (clone $query)
+                ->whereIn('status', ['applied', 'screening'])
+                ->count(),
+            'ghosted' => (clone $query)
+                ->where('status', 'ghosted')
+                ->count(),
+        ];
+
+        $needsAttention = (clone $query)
+            ->whereNotIn('status', ['rejected', 'withdrawn', 'ghosted'])
+            ->orderBy('last_activity_at', 'asc')
+            ->limit(4)
+            ->get();
+
+        return Inertia::render('Dashboard/Index', [
+            'summary' => $summary,
+            'needsAttention' => $needsAttention,
+        ]);
     }
 
     public function index(Request $request)
