@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import FollowUpModal from './Components/FollowUpModal';
+import StatusDropdown from '@/Components/StatusDropdown';
 import {
     Building2,
     Calendar,
@@ -82,13 +83,11 @@ export default function Show({ application, nextAction }) {
                                 {application.role_title}
                             </p>
                             <div className="mt-3 flex items-center gap-3">
-                                <span
-                                    className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusColor(
-                                        application.status
-                                    )}`}
-                                >
-                                    {application.status}
-                                </span>
+                                <StatusDropdown 
+                                    applicationId={application.id}
+                                    currentStatus={application.status}
+                                    size="md"
+                                />
                                 <span
                                     className={`rounded-full px-3 py-1 text-xs font-medium ${getHealthColor(
                                         'needs_attention'

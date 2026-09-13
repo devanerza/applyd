@@ -209,4 +209,34 @@ class ApplicationController extends Controller
 
         return redirect()->route('applications.index')->with('success', 'Application deleted successfully.');
     }
+
+    public function updateStatus(Request $request, Application $application)
+    {
+        if ($application->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:applied,screening,interviewing,offer,rejected,withdrawn,ghosted',
+        ]);
+
+        $oldStatus = $application->status;
+
+        $application->update([
+            'status' => $validated['status'],
+            'last_activity_at' => now(),
+        ]);
+
+        if ($oldStatus !== $application->status) {
+            Activity::create([
+                'application_id' => $application->id,
+                'user_id' => auth()->id(),
+                'type' => 'status_change',
+                'title' => "Status changed from {$oldStatus} to {$application->status}",
+                'activity_date' => now()->toDateString(),
+            ]);
+        }
+
+        return back();
+    }
 }

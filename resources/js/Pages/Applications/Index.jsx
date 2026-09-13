@@ -1,5 +1,7 @@
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import { AppSidebar } from './Components/app-sidebar';
+import StatusDropdown from '@/Components/StatusDropdown';
+import FilterDropdown from '@/Components/FilterDropdown';
 import {
     Search,
     SlidersHorizontal,
@@ -179,11 +181,11 @@ export default function ApplicationsIndex({ applications, filters }) {
                                                     className={`h-5 w-5 ${style.iconColor}`}
                                                 />
                                             </div>
-                                            <span
-                                                className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${style.badge} capitalize`}
-                                            >
-                                                {app.status}
-                                            </span>
+                                            <StatusDropdown 
+                                                applicationId={app.id}
+                                                currentStatus={app.status}
+                                                size="md"
+                                            />
                                         </div>
 
                                         <p

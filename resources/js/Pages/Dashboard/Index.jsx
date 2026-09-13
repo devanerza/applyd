@@ -1,5 +1,6 @@
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import StatusDropdown from '@/Components/StatusDropdown';
 import {
     Search,
     CheckCircle2,
@@ -161,9 +162,11 @@ export default function Dashboard({ summary, needsAttention }) {
                                             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
                                                 <Building2 className="h-5 w-5 text-primary" />
                                             </div>
-                                            <span className="rounded-full bg-primary/20 px-3 py-1 font-label font-bold text-[10px] tracking-wide uppercase text-primary">
-                                                {app.status}
-                                            </span>
+                                            <StatusDropdown 
+                                                applicationId={app.id}
+                                                currentStatus={app.status}
+                                                size="sm"
+                                            />
                                         </div>
 
                                         <p className="font-headline mt-4 font-bold text-indigo-900">

@@ -18,6 +18,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('applications', ApplicationController::class);
+    Route::patch('applications/{application}/status', [ApplicationController::class, 'updateStatus'])
+        ->name('applications.update-status');
 
     Route::post('applications/{application}/activities', [ActivityController::class, 'store'])
         ->name('applications.activities.store');
