@@ -17,6 +17,11 @@ import { useState } from 'react';
 export default function ApplicationsIndex({ applications, filters }) {
     const user = usePage().props.auth.user;
     const [search, setSearch] = useState('');
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentStatus = urlParams.get('status');
+    const currentSource = urlParams.get('source');
+    const followUpDue = urlParams.get('follow_up_due');
 
     const items = Array.isArray(applications)
         ? applications
@@ -128,26 +133,30 @@ export default function ApplicationsIndex({ applications, filters }) {
 
                     <div className="mt-6 flex flex-wrap items-center gap-3">
                         <SlidersHorizontal className="h-4 w-4 text-gray-400" />
-                        {filters?.map((filter) => (
-                            <button
-                                key={filter.label}
-                                type="button"
-                                onClick={() => toggleFilter(filter.label)}
-                                className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition ${
-                                    filter.active
-                                        ? 'border-emerald-400 bg-emerald-400/20 text-emerald-700'
-                                        : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
-                                }`}
-                            >
-                                {filter.active && (
-                                    <CheckCircle2 className="h-3.5 w-3.5" />
-                                )}
-                                {filter.label}
-                                {filter.hasDropdown && (
-                                    <ChevronDown className="h-3.5 w-3.5" />
-                                )}
-                            </button>
-                        ))}
+                        <FilterDropdown 
+                            label="Status"
+                            options={statusOptions}
+                            currentValue={currentStatus}
+                            paramName="status"
+                        />
+                        <FilterDropdown 
+                            label="Source"
+                            options={sourceOptions}
+                            currentValue={currentSource}
+                            paramName="source"
+                        />
+                        <button
+                            type="button"
+                            onClick={toggleFollowUpDue}
+                            className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition ${
+                                followUpDue
+                                    ? 'border-emerald-400 bg-emerald-400/20 text-emerald-700'
+                                    : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+                            }`}
+                        >
+                            {followUpDue && <CheckCircle2 className="h-3.5 w-3.5" />}
+                            Follow-up Due
+                        </button>
                     </div>
 
                     {items.length === 0 ? (
