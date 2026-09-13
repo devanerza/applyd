@@ -29,6 +29,7 @@ export function AppSidebar() {
     };
 
     return (
+        <>
         <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col border-r border-neutral bg-base-100 px-4 py-6 overflow-hidden">
             <div className="mb-8 flex items-center gap-2 px-2">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
@@ -94,11 +95,16 @@ export function AppSidebar() {
                     Logout
                 </button>
             </nav>
-
-            <AddApplicationModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-            />
         </aside>
+
+        {/* Rendered outside the <aside> on purpose: a fixed-position aside creates its own
+            stacking context, which would trap the modal's z-index inside it and let page
+            content paint over the modal. As a sibling, the modal joins the root stacking
+            context and its z-[9999] works as intended. */}
+        <AddApplicationModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+        />
+        </>
     );
 }
