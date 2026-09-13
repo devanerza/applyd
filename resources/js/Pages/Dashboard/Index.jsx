@@ -178,23 +178,22 @@ export default function Dashboard({ summary, needsAttention }) {
 
                                         <div className="mt-4 flex items-center justify-between">
                                             <div className="flex items-center gap-2">
-                                                <Link
-                                                    href={route('applications.show', app.id)}
-                                                    className={`font-body rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-                                                        app.recruiter_name ||
-                                                        app.recruiter_email
-                                                            ? 'bg-primary text-primary-content hover:bg-primary/80'
-                                                            : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
-                                                    }`}
-                                                    title={
-                                                        app.recruiter_name ||
-                                                        app.recruiter_email
-                                                            ? ''
-                                                            : 'Add recruiter contact to enable follow-ups'
-                                                    }
-                                                >
-                                                    Follow up
-                                                </Link>
+                                                {(app.recruiter_name || app.recruiter_email) ? (
+                                                    <Link
+                                                        href={route('applications.show', app.id)}
+                                                        className="font-body rounded-full px-4 py-2 text-xs font-semibold bg-primary text-primary-content hover:bg-primary/80 transition-colors"
+                                                    >
+                                                        Follow up
+                                                    </Link>
+                                                ) : (
+                                                    <button
+                                                        disabled
+                                                        title="Add recruiter contact to enable follow-ups"
+                                                        className="font-body rounded-full px-4 py-2 text-xs font-semibold bg-gray-300 text-gray-500 cursor-not-allowed opacity-50"
+                                                    >
+                                                        Follow up
+                                                    </button>
+                                                )}
                                                 <button
                                                     onClick={() => handleIgnore(app.id)}
                                                     className="font-body rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors"

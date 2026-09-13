@@ -5,7 +5,6 @@ import FilterDropdown from '@/Components/FilterDropdown';
 import {
     Search,
     SlidersHorizontal,
-    ChevronDown,
     CheckCircle2,
     AlertTriangle,
     Ban,
@@ -35,17 +34,36 @@ export default function ApplicationsIndex({ applications, filters }) {
         });
     };
 
-    const toggleFilter = (label) => {
-        const params = { search };
-        if (label === 'Status') params.status = 'applied';
-        if (label === 'Source') params.source = 'linkedin';
-        if (label === 'Follow-up Due') params.follow_up_due = '1';
-        if (label === 'Ghosted') params.status = 'ghosted';
-        router.get(route('applications.index'), params, {
+    const toggleFollowUpDue = () => {
+        const params = new URLSearchParams(window.location.search);
+        if (followUpDue) {
+            params.delete('follow_up_due');
+        } else {
+            params.set('follow_up_due', '1');
+        }
+        router.get(route('applications.index') + '?' + params.toString(), {}, {
             preserveState: true,
             preserveScroll: true,
         });
     };
+
+    const statusOptions = [
+        { value: 'applied', label: 'Applied' },
+        { value: 'screening', label: 'Screening' },
+        { value: 'interviewing', label: 'Interviewing' },
+        { value: 'offer', label: 'Offer' },
+        { value: 'rejected', label: 'Rejected' },
+        { value: 'withdrawn', label: 'Withdrawn' },
+        { value: 'ghosted', label: 'Ghosted' },
+    ];
+
+    const sourceOptions = [
+        { value: 'linkedin', label: 'LinkedIn' },
+        { value: 'company_website', label: 'Company Website' },
+        { value: 'job_board', label: 'Job Board' },
+        { value: 'referral', label: 'Referral' },
+        { value: 'other', label: 'Other' },
+    ];
 
     const healthStyles = {
         needs_attention: {
