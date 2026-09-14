@@ -279,62 +279,7 @@ export default function Show({ application, nextAction }) {
                             </div>
                         )}
 
-                        {/* Documents Card */}
-                        {(application.resume_version || application.cover_letter_version) && (
-                            <div className="rounded-3xl border border-gray-200 bg-white p-6">
-                                <div className="mb-4 flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-lg font-bold text-gray-900">
-                                        <FileText className="h-5 w-5 text-primary" />
-                                        Documents
-                                    </div>
-                                    <button className="text-primary hover:text-primary/80">
-                                        <Plus className="h-5 w-5" />
-                                    </button>
-                                </div>
-                                <div className="space-y-3">
-                                    {application.resume_version && (
-                                        <div className="flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 p-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-100">
-                                                    <FileText className="h-5 w-5 text-red-600" />
-                                                </div>
-                                                <div>
-                                                    <p className="font-medium text-gray-900">
-                                                        Resume
-                                                    </p>
-                                                    <p className="text-sm text-gray-500">
-                                                        {application.resume_version}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <button className="text-gray-400 hover:text-gray-600">
-                                                <Download className="h-5 w-5" />
-                                            </button>
-                                        </div>
-                                    )}
-                                    {application.cover_letter_version && (
-                                        <div className="flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 p-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
-                                                    <FileText className="h-5 w-5 text-purple-600" />
-                                                </div>
-                                                <div>
-                                                    <p className="font-medium text-gray-900">
-                                                        Cover Letter
-                                                    </p>
-                                                    <p className="text-sm text-gray-500">
-                                                        {application.cover_letter_version}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <button className="text-gray-400 hover:text-gray-600">
-                                                <Download className="h-5 w-5" />
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
+                        {/* Interviews Card - Placeholder for Phase 3 */}
                     </div>
 
                     {/* Right Column - Activity Timeline */}

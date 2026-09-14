@@ -20,8 +20,6 @@ class Application extends Model
         'employment_type',
         'salary_range',
         'source',
-        'resume_version',
-        'cover_letter_version',
         'notes',
         'last_activity_at',
         'follow_up_at',
@@ -47,10 +45,7 @@ class Application extends Model
         return $this->hasMany(Activity::class)->orderBy('activity_date', 'desc');
     }
 
-    public function documents()
-    {
-        return $this->belongsToMany(Document::class);
-    }
+
 
     public function latestActivity()
     {

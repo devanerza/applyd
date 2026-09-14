@@ -57,8 +57,5 @@ class User extends Authenticatable
         return $this->hasMany(Activity::class);
     }
 
-    public function documents()
-    {
-        return $this->hasMany(Document::class);
-    }
+
 }
