@@ -8,7 +8,7 @@ This document defines the complete rebuild of the Job Application Tracker ("Stri
 
 **Backend architecture:** Controllers stay thin — they handle HTTP concerns only (validation, auth, delegation). Business logic lives in `app/Services/` (e.g. `AnalyticsService`, follow-up/health calculation logic) and `app/Actions/` (single-purpose operations like `DetermineNextAction`, `EvaluateGhostingStatus`). Do not put domain logic in controllers.
 
-**Git workflow:** Commit using [Conventional Commits](https://www.conventionalcommits.org/) format (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, etc.). **Each module/feature gets its own commit** — do not bundle unrelated changes into a single commit. A single response may contain multiple commits if changes span different modules/features. Example: adding a migration + updating a model = 2 commits (`feat: add documents table` + `feat: add documents relationship to Application`).
+**Git workflow:** Commit using [Conventional Commits](https://www.conventionalcommits.org/) format (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, etc.). **Each module/feature gets its own commit** — do not bundle unrelated changes into a single commit. A single response may contain multiple commits if changes span different modules/features. Example: adding a migration + updating a model = 2 commits (`feat: add activities table` + `feat: add activities relationship to Application`).
 
 ---
 
@@ -17,12 +17,11 @@ This document defines the complete rebuild of the Job Application Tracker ("Stri
 1. [Phase 0 — Cleanup & Foundation](#phase-0--cleanup--foundation)
 2. [Phase 1 — Application Lifecycle (MVP Core)](#phase-1--application-lifecycle-mvp-core)
 3. [Phase 2 — Intelligence Layer](#phase-2--intelligence-layer)
-4. [Phase 3 — Automation](#phase-3--automation)
-5. [Phase 4 — Interview Management](#phase-4--interview-management)
-6. [Phase 5 — Insights & Analytics](#phase-5--insights--analytics)
-7. [UI Overhaul — daisyUI Migration](#ui-overhaul--daisyui-migration)
-8. [Testing Strategy](#testing-strategy)
-9. [File Reference](#file-reference)
+4. [Phase 3 — Interview Management](#phase-3--interview-management)
+5. [Phase 4 — Insights & Analytics](#phase-4--insights--analytics)
+6. [UI Overhaul — daisyUI Migration](#ui-overhaul--daisyui-migration)
+7. [Testing Strategy](#testing-strategy)
+8. [File Reference](#file-reference)
 
 ---
 
@@ -115,8 +114,6 @@ location          — string, nullable
 employment_type   — enum('full_time','part_time','internship','contract','freelance'), nullable
 salary_range      — string, nullable (store as text like "$80k-$100k")
 source            — enum('linkedin','company_website','job_board','referral','other'), nullable
-resume_version    — string, nullable (e.g., "v3")
-cover_letter_version — string, nullable
 notes             — text, nullable
 ```
 
@@ -142,41 +139,13 @@ updated_at      — timestamp
 
 **Index:** composite index on `application_id` + `activity_date`.
 
-### 1.3 Database — Create `documents` table
-
-**New migration:** `database/migrations/xxxx_create_documents_table.php`
-
-```
-id              — bigint, auto-increment
-user_id         — foreign ID, cascade delete
-name            — string (e.g., "Resume v3")
-type            — enum('resume','cover_letter','portfolio')
-file_path       — string, nullable (for future file uploads)
-version_number  — integer, default 1
-notes           — text, nullable
-created_at      — timestamp
-updated_at      — timestamp
-```
-
-### 1.4 Database — Create `application_document` pivot table
-
-**New migration:** `database/migrations/xxxx_create_application_document_table.php`
-
-```
-application_id  — foreign ID, cascade delete
-document_id     — foreign ID, cascade delete
-```
-
-Primary key: composite (`application_id`, `document_id`).
-
-### 1.5 Update Application model
+### 1.3 Update Application model
 
 **File:** `app/Models/Application.php`
 
 ```php
 // Add to $fillable:
-'location', 'employment_type', 'salary_range', 'source',
-'resume_version', 'cover_letter_version', 'notes'
+'location', 'employment_type', 'salary_range', 'source', 'notes'
 
 // Add casts:
 'last_activity_at' => 'datetime',
@@ -187,11 +156,6 @@ Primary key: composite (`application_id`, `document_id`).
 public function activities()
 {
     return $this->hasMany(Activity::class)->orderBy('activity_date', 'desc');
-}
-
-public function documents()
-{
-    return $this->belongsToMany(Document::class);
 }
 
 public function user()
@@ -206,7 +170,7 @@ public function latestActivity()
 }
 ```
 
-### 1.6 Create Activity model
+### 1.4 Create Activity model
 
 **New file:** `app/Models/Activity.php`
 
@@ -234,31 +198,7 @@ class Activity extends Model
 }
 ```
 
-### 1.7 Create Document model
-
-**New file:** `app/Models/Document.php`
-
-```php
-class Document extends Model
-{
-    protected $fillable = [
-        'user_id', 'name', 'type', 'file_path',
-        'version_number', 'notes',
-    ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function applications()
-    {
-        return $this->belongsToMany(Application::class);
-    }
-}
-```
-
-### 1.8 Update User model
+### 1.5 Update User model
 
 **File:** `app/Models/User.php`
 
@@ -268,14 +208,9 @@ public function activities()
 {
     return $this->hasMany(Activity::class);
 }
-
-public function documents()
-{
-    return $this->hasMany(Document::class);
-}
 ```
 
-### 1.9 Rewrite ApplicationController
+### 1.5 Rewrite ApplicationController
 
 **File:** `app/Http/Controllers/ApplicationController.php`
 
@@ -299,14 +234,12 @@ Full rewrite. Key changes:
 'employment_type' => 'nullable|in:full_time,part_time,internship,contract,freelance',
 'salary_range' => 'nullable|string|max:255',
 'source' => 'nullable|in:linkedin,company_website,job_board,referral,other',
-'resume_version' => 'nullable|string|max:255',
-'cover_letter_version' => 'nullable|string|max:255',
 'notes' => 'nullable|string',
 'applied_at' => 'required|date',
 'status' => 'in:applied,screening,interviewing,offer,rejected,withdrawn,ghosted',
 ```
 
-### 1.10 Create ActivityController
+### 1.6 Create ActivityController
 
 **New file:** `app/Http/Controllers/ActivityController.php`
 
@@ -323,20 +256,7 @@ class ActivityController extends Controller
 }
 ```
 
-### 1.11 Create DocumentController
-
-**New file:** `app/Http/Controllers/DocumentController.php`
-
-```php
-class DocumentController extends Controller
-{
-    // index() — list user's documents
-    // store() — create document (name, type, notes)
-    // destroy() — delete document (detach from applications first)
-}
-```
-
-### 1.12 Update routes
+### 1.7 Update routes
 
 **File:** `routes/web.php`
 
@@ -349,12 +269,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('applications.activities.store');
     Route::delete('activities/{activity}', [ActivityController::class, 'destroy'])
         ->name('activities.destroy');
-
-    Route::resource('documents', DocumentController::class)->except(['show', 'edit', 'update']);
 });
 ```
 
-### 1.13 Frontend — Application List page (rewrite)
+### 1.8 Frontend — Application List page (rewrite)
 
 **File:** `resources/js/Pages/Applications/Index.jsx` — **PROVIDED BY USER**
 
@@ -375,7 +293,7 @@ Rewrite using daisyUI components (after Phase 7 UI migration). For now, build wi
 - Status dropdown filter
 - Source dropdown filter
 
-### 1.14 Frontend — Application Create page (new)
+### 1.9 Frontend — Application Create page (new)
 
 **New file:** `resources/js/Pages/Applications/Create.jsx` — **PROVIDED BY USER**
 
@@ -388,19 +306,17 @@ Form fields:
 - Salary Range (optional)
 - Application Date (required, date input)
 - Source (select)
-- Resume Version (text input)
-- Cover Letter Version (text input)
 - Notes (textarea)
 
 Use daisyUI `form-control`, `input`, `select`, `textarea` classes.
 
-### 1.15 Frontend — Application Edit page (new)
+### 1.10 Frontend — Application Edit page (new)
 
 **New file:** `resources/js/Pages/Applications/Edit.jsx` — **PROVIDED BY USER**
 
 Same form as Create, pre-filled with existing data.
 
-### 1.16 Frontend — Application Detail page (new)
+### 1.11 Frontend — Application Detail page (new)
 
 **New file:** `resources/js/Pages/Applications/Show.jsx` — **PROVIDED BY USER**
 
@@ -413,10 +329,9 @@ This is the central page of the product (PRD 4.12). Must answer:
 - **Header:** Company name, role title, current status badge, health badge, Edit button, Add Activity button
 - **Next Action bar:** Derived message (e.g., "Follow up in 2 days" — wired in Phase 2, placeholder for now)
 - **Application Details card:** Applied date, source, location, salary, employment type
-- **Documents card:** Resume version, cover letter version
 - **Activity Timeline:** Vertical timeline of all activities, ordered by date descending. Each entry shows: type icon, title, date, description. "Add Activity" button opens a modal.
 
-### 1.17 Frontend — Activity modal (new)
+### 1.12 Frontend — Activity modal (new)
 
 **New file:** `resources/js/Pages/Applications/Components/ActivityModal.jsx` — **PROVIDED BY USER**
 
@@ -426,17 +341,17 @@ daisyUI `modal` with form:
 - Description (textarea, optional)
 - Date (date input, defaults to today)
 
-### 1.18 Frontend — Authenticated Layout (rewrite)
+### 1.13 Frontend — Authenticated Layout (rewrite)
 
 **File:** `resources/js/Layouts/AuthenticatedLayout.jsx` — **PROVIDED BY USER**
 
 - Remove all shadcn/SidebarProvider code
 - Remove commented-out Breeze layout code
 - Build clean layout with daisyUI: sidebar (`drawer` + `drawer-side`) + main content area
-- Sidebar nav links: Dashboard, Applications, Documents
+- Sidebar nav links: Dashboard, Applications
 - Top bar: Search input, user dropdown (Profile, Logout)
 
-### 1.19 Update ApplicationFactory
+### 1.14 Update ApplicationFactory
 
 **File:** `database/factories/ApplicationFactory.php`
 
@@ -658,80 +573,11 @@ class ExpireFollowUps
 
 ---
 
-## Phase 3 — Automation
-
-**Goal:** Scheduled follow-up processing, email reminders, automatic health/status updates.
-
-### 3.1 Schedule the `SendFollowUpReminders` command
-
-**File:** `routes/console.php`
-
-```php
-use App\Console\Commands\SendFollowUpReminders;
-
-Schedule::daily()->at('09:00')->command(SendFollowUpReminders::class);
-```
-
-### 3.2 Enhance `SendFollowUpReminders` command
-
-**File:** `app/Console/Commands/SendFollowUpReminders.php`
-
-Rewrite to use the intelligence layer:
-```php
-// For each user:
-//   For each active application:
-//     1. Evaluate ghosting status
-//     2. If ghosted and not yet marked, prompt user (email)
-//     3. Calculate follow-up due date
-//     4. If follow-up is due today, send reminder
-//     5. Update application health
-```
-
-### 3.3 Enhance FollowUpReminder mailable
-
-**File:** `app/Mail/FollowUpReminder.php`
-
-Update to include:
-- Application details (company, role, status)
-- Days since last activity
-- Health status
-- Quick action links (optional — deep links to the app)
-
-### 3.4 Update email template
-
-**File:** `resources/views/email/follow-up-reminder.blade.php`
-
-Redesign with application context, not just a generic reminder.
-
-### 3.5 Stale application detection job
-
-**New file:** `app/Jobs/DetectStaleApplications.php`
-
-```php
-// Runs daily via scheduler
-// For each active application with no activity in 14+ days:
-//   Set health to 'stale'
-//   (Future: send "this application may be going cold" notification)
-```
-
-### 3.6 Ghosting auto-detection job
-
-**New file:** `app/Jobs/DetectGhostedApplications.php`
-
-```php
-// Runs daily via scheduler
-// For each active application:
-//   Run EvaluateGhostingStatus
-//   If ghosted: notify user that application may be ghosted (prompt to update status via dropdown)
-```
-
----
-
-## Phase 4 — Interview Management
+## Phase 3 — Interview Management
 
 **Goal:** Structured interview records linked to applications.
 
-### 4.1 Database — Create `interviews` table
+### 3.1 Database — Create `interviews` table
 
 **New migration:** `database/migrations/xxxx_create_interviews_table.php`
 
@@ -754,7 +600,7 @@ updated_at      — timestamp
 
 **Index:** `scheduled_at` for querying upcoming interviews.
 
-### 4.2 Create Interview model
+### 3.2 Create Interview model
 
 **New file:** `app/Models/Interview.php`
 
@@ -786,7 +632,7 @@ class Interview extends Model
 }
 ```
 
-### 4.3 Add relationship to Application model
+### 3.3 Add relationship to Application model
 
 ```php
 public function interviews()
@@ -795,7 +641,7 @@ public function interviews()
 }
 ```
 
-### 4.4 Create InterviewController
+### 3.4 Create InterviewController
 
 **New file:** `app/Http/Controllers/InterviewController.php`
 
@@ -809,14 +655,14 @@ class InterviewController extends Controller
 }
 ```
 
-### 4.5 Update routes
+### 3.5 Update routes
 
 ```php
 Route::resource('applications.interviews', InterviewController::class)
     ->except(['index', 'show']);
 ```
 
-### 4.6 Frontend — Interview form modal
+### 3.6 Frontend — Interview form modal
 
 **New file:** `resources/js/Pages/Applications/Components/InterviewModal.jsx` — **PROVIDED BY USER**
 
@@ -831,7 +677,7 @@ daisyUI modal with fields:
 - Notes (textarea)
 - Preparation Checklist (dynamic list of items with add/remove)
 
-### 4.7 Frontend — Interview cards on Application Detail
+### 3.7 Frontend — Interview cards on Application Detail
 
 **File:** `resources/js/Pages/Applications/Show.jsx`
 
@@ -840,7 +686,7 @@ Add "Interviews" section below the activity timeline:
 - Past interviews grayed out, upcoming highlighted
 - [Edit] [Delete] actions
 
-### 4.8 Frontend — Upcoming interviews on Dashboard
+### 3.8 Frontend — Upcoming interviews on Dashboard
 
 **File:** `resources/js/Pages/Dashboard.jsx`
 
@@ -848,11 +694,11 @@ Wire up the "Upcoming Interviews" section with real data from `Interview` model.
 
 ---
 
-## Phase 5 — Insights & Analytics
+## Phase 4 — Insights & Analytics
 
 **Goal:** Decision-supporting metrics beyond raw counts.
 
-### 5.1 Create AnalyticsService
+### 4.1 Create AnalyticsService
 
 **New file:** `app/Services/AnalyticsService.php`
 
@@ -888,16 +734,10 @@ class AnalyticsService
         // Per source: total applications, interviews generated, interview rate
         // Returns: ['linkedin' => ['total' => N, 'interviews' => N, 'rate' => N%], ...]
     }
-
-    public function resumeEffectiveness(): array
-    {
-        // Per resume version: total applications, interviews generated, interview rate
-        // Returns: ['v3' => ['total' => N, 'interviews' => N, 'rate' => N%], ...]
-    }
 }
 ```
 
-### 5.2 Create AnalyticsController
+### 4.2 Create AnalyticsController
 
 **New file:** `app/Http/Controllers/AnalyticsController.php`
 
@@ -912,31 +752,29 @@ class AnalyticsController extends Controller
             'responseRate' => $service->responseRate(),
             'interviewConversion' => $service->interviewConversionRate(),
             'sourceEffectiveness' => $service->sourceEffectiveness(),
-            'resumeEffectiveness' => $service->resumeEffectiveness(),
         ]);
     }
 }
 ```
 
-### 5.3 Frontend — Analytics page
+### 4.3 Frontend — Analytics page
 
 **New file:** `resources/js/Pages/Analytics/Index.jsx` — **PROVIDED BY USER**
 
 Sections:
-- **Funnel visualization** — horizontal bar or funnel chart (source/resume effectiveness)
+- **Funnel visualization** — horizontal bar or funnel chart
 - **Key metrics cards** — response rate, interview conversion rate
 - **Source breakdown** — table or bar chart of applications and interview rate per source
-- **Resume effectiveness** — table of interview rate per resume version
 
 Use daisyUI `stat` components for metric cards. For charts, use a lightweight library (e.g., `recharts` or CSS-based bars — avoid heavy charting libraries per the "calm by default" principle).
 
-### 5.4 Update routes
+### 4.4 Update routes
 
 ```php
 Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
 ```
 
-### 5.5 Update sidebar navigation
+### 4.5 Update sidebar navigation
 
 **File:** `resources/js/Layouts/AuthenticatedLayout.jsx`
 
@@ -1084,7 +922,6 @@ Health color mapping in the UI:
 | `tests/Unit/Actions/CalculateFollowUpDueDateTest.php` | Test date calculations |
 | `tests/Unit/Models/ApplicationTest.php` | Relationships, scopes, casts |
 | `tests/Unit/Models/ActivityTest.php` | Relationships, casts |
-| `tests/Unit/Models/DocumentTest.php` | Relationships |
 | `tests/Unit/Models/InterviewTest.php` | Relationships, casts |
 | `tests/Unit/Services/AnalyticsServiceTest.php` | All analytics methods |
 
@@ -1095,7 +932,6 @@ Health color mapping in the UI:
 | `tests/Feature/ApplicationCrudTest.php` | Create, read, update, delete applications with auth |
 | `tests/Feature/ActivityManagementTest.php` | Log activities, verify timeline |
 | `tests/Feature/StatusTransitionTest.php` | Status changes with confirmation |
-| `tests/Feature/DocumentManagementTest.php` | CRUD documents, attach to applications |
 | `tests/Feature/InterviewManagementTest.php` | CRUD interviews, linked to applications |
 | `tests/Feature/DashboardTest.php` | Dashboard renders with correct data |
 | `tests/Feature/AnalyticsTest.php` | Analytics page renders with computed data |
@@ -1143,10 +979,8 @@ components.json
 
 ```
 app/Models/Activity.php
-app/Models/Document.php
 app/Models/Interview.php
 app/Http/Controllers/ActivityController.php
-app/Http/Controllers/DocumentController.php
 app/Http/Controllers/InterviewController.php
 app/Http/Controllers/AnalyticsController.php
 app/Actions/DetermineNextAction.php
@@ -1154,8 +988,6 @@ app/Actions/EvaluateGhostingStatus.php
 app/Actions/DetermineApplicationHealth.php
 app/Actions/CalculateFollowUpDueDate.php
 app/Actions/ExpireFollowUps.php
-app/Jobs/DetectStaleApplications.php
-app/Jobs/DetectGhostedApplications.php
 app/Services/AnalyticsService.php
 config/followup.php
 resources/js/Pages/Applications/Create.jsx
@@ -1168,8 +1000,6 @@ resources/js/Pages/Applications/Components/StatusTransitionModal.jsx
 resources/js/Pages/Analytics/Index.jsx
 database/migrations/xxxx_add_details_to_applications_table.php
 database/migrations/xxxx_create_activities_table.php
-database/migrations/xxxx_create_documents_table.php
-database/migrations/xxxx_create_application_document_table.php
 database/migrations/xxxx_create_interviews_table.php
 tests/Unit/Actions/DetermineNextActionTest.php
 tests/Unit/Actions/EvaluateGhostingStatusTest.php
@@ -1177,13 +1007,11 @@ tests/Unit/Actions/DetermineApplicationHealthTest.php
 tests/Unit/Actions/CalculateFollowUpDueDateTest.php
 tests/Unit/Models/ApplicationTest.php
 tests/Unit/Models/ActivityTest.php
-tests/Unit/Models/DocumentTest.php
 tests/Unit/Models/InterviewTest.php
 tests/Unit/Services/AnalyticsServiceTest.php
 tests/Feature/ApplicationCrudTest.php
 tests/Feature/ActivityManagementTest.php
 tests/Feature/StatusTransitionTest.php
-tests/Feature/DocumentManagementTest.php
 tests/Feature/InterviewManagementTest.php
 tests/Feature/DashboardTest.php
 tests/Feature/AnalyticsTest.php
@@ -1201,7 +1029,6 @@ resources/css/app.css
 tailwind.config.js
 package.json
 routes/web.php
-routes/console.php
 database/factories/ApplicationFactory.php
 resources/js/Pages/Dashboard.jsx (entirely new content)
 ```
@@ -1209,9 +1036,6 @@ resources/js/Pages/Dashboard.jsx (entirely new content)
 ### Files to EDIT (minor changes)
 
 ```
-app/Console/Commands/SendFollowUpReminders.php
-app/Mail/FollowUpReminder.php
-resources/views/email/follow-up-reminder.blade.php
 resources/js/app.jsx (update layout import if needed)
 routes/api.php (remove test route)
 .gitignore (ensure .env is listed)
@@ -1228,10 +1052,9 @@ Follow this sequence to avoid breaking changes:
 3. **Phase 1** — Database migrations, models, controllers, routes. Build all pages with daisyUI.
 4. **M.4-M.6** — Complete the daisyUI migration across all remaining pages. Remove shadcn deps.
 5. **Phase 2** — Intelligence layer (actions, dashboard, health).
-6. **Phase 3** — Automation (scheduler, jobs, emails).
-7. **Phase 4** — Interview management.
-8. **Phase 5** — Analytics.
-9. **Tests** — Write tests throughout, but bulk up coverage after Phase 2.
+6. **Phase 3** — Interview management.
+7. **Phase 4** — Analytics.
+8. **Tests** — Write tests throughout, but bulk up coverage after Phase 2.
 
 **Run `php artisan migrate` after each database migration.**
 **Run `npm run build` after each frontend change to verify compilation.**
