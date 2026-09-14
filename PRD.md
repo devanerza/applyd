@@ -74,8 +74,6 @@ Captured fields (kept deliberately minimal — only what affects decisions/actio
 - Salary range (optional)
 - Application date
 - Source (LinkedIn / Company website / Job board / Referral / Other)
-- Resume version used
-- Cover letter version used
 - Notes
 
 Design principle: do not add metadata fields just because a spreadsheet could hold them. Only store information that affects a decision or an action.
@@ -192,18 +190,6 @@ Aggregate statistics (totals, counts) are secondary and can appear below the act
 
 ---
 
-### 4.6 Reminders & Notifications
-
-Expands beyond follow-ups into a general reminder engine. Reminder types:
-- Follow-up due
-- Upcoming interview
-- Application going stale (no update in N days)
-- Ghosting warning (after N follow-ups with no response)
-
-Delivery: email reminders (building on the existing scheduled-command pattern already in place: a scheduled follow-up job). Exact channel/scheduling mechanics to be defined during design — this PRD specifies behavior, not implementation.
-
----
-
 ### 4.7 Interview Management
 
 Once an application reaches the Interview stage, it should support structured interview records:
@@ -215,20 +201,6 @@ Once an application reaches the Interview stage, it should support structured in
 - Preparation checklist (freeform checklist items)
 
 Upcoming interviews automatically surface on the Dashboard (4.5).
-
----
-
-### 4.8 Application Documents (Versioned)
-
-Rather than storing a single filename per document, the system tracks **versions** of resumes/cover letters/portfolios and which applications used which version.
-
-Example:
-```
-Resume v3 — used for 12 applications
-Resume v2 — used for 8 applications
-```
-
-When creating/editing an application, the user selects which resume/cover letter version was used. This enables the effectiveness analysis in 4.11 (source/resume effectiveness).
 
 ---
 
@@ -275,7 +247,6 @@ Available once sufficient application volume exists. Moves beyond raw counts int
 - **Response rate:** responses ÷ total applications
 - **Interview conversion rate:** interviews ÷ responses
 - **Source effectiveness:** applications and interviews generated per source (LinkedIn, company website, referral, etc.)
-- **Resume/document effectiveness:** interview rate per resume version (enabled by 4.8)
 
 ---
 
@@ -290,7 +261,6 @@ The central page of the product. Must answer three questions at a glance:
 - Header: company, role, current status/health, [Edit] / [Add activity] actions
 - Next action (e.g., "Follow up in 2 days")
 - Application details (applied date, source, location, salary, etc.)
-- Documents used (resume/cover letter version)
 - Full activity timeline
 
 ---
@@ -327,19 +297,13 @@ To prevent scope creep into a generic productivity tool, the following will **no
 - Application health states
 - *(Follow-up windows and ghosting thresholds ship as fixed placeholders in this phase; user-configurable settings are a later enhancement, not required for MVP)*
 
-**Phase 3 — Automation**
-- Scheduled follow-up processing
-- Email reminders
-- Upcoming interview reminders
-- Automatic status/health updates
-
-**Phase 4 — Interview Management**
+**Phase 3 — Interview Management**
 - Interview records
 - Interview date/time tracking
 - Interview notes / preparation checklist
 - Upcoming interviews on dashboard
 
-**Phase 5 — Insights**
+**Phase 4 — Insights**
 - Application funnel
 - Response rate
 - Interview conversion
@@ -374,7 +338,7 @@ To prevent scope creep into a generic productivity tool, the following will **no
 ## 9. Tech Stack
 
 - **Backend:** Laravel, Eloquent ORM, Laravel Breeze (authentication), MySQL
-- **Domain logic:** kept lean — business logic lives in `app/Services/` (e.g. `AnalyticsService`, follow-up/health calculation logic) and `app/Actions/` (single-purpose operations like `DetermineNextAction`, `EvaluateGhostingStatus`). Controllers stay thin — they handle HTTP concerns only (validation, auth, delegation to services/actions). Laravel's built-in scheduler/jobs/notifications are used for automation (Phase 3) rather than additional packages.
+- **Domain logic:** kept lean — business logic lives in `app/Services/` (e.g. `AnalyticsService`, follow-up/health calculation logic) and `app/Actions/` (single-purpose operations like `DetermineNextAction`, `EvaluateGhostingStatus`). Controllers stay thin — they handle HTTP concerns only (validation, auth, delegation to services/actions).
 - **Frontend:** Inertia.js + React
 - **UI components:** daisyUI (Tailwind-based), chosen over shadcn/Radix for simplicity — this app's UI is mostly cards, badges, timelines, and forms, which daisyUI covers directly with less code to own/maintain. A raw Radix primitive may be dropped in later for the rare case that needs it (e.g. a company/location combobox), but daisyUI end-to-end is the default for MVP.
 
@@ -390,7 +354,7 @@ Design reference: **Material Design 3 (M3)**. This section adapts M3's system (c
 
 - **Status and health are the primary visual language.** Color, more than any other element, is what tells the user "this needs you" vs. "this is fine." M3's color-role system (not just raw brand colors) is used deliberately for this.
 - **The dashboard is the face of the product.** Its visual hierarchy should read, at a glance: what's urgent → what's upcoming → what's just informational. Everything else (list views, detail pages) is secondary in visual weight.
-- **Calm by default, alert when it matters.** Most of the UI (application lists, forms, documents) should be quiet and neutral. Color/emphasis is reserved for things that map to an action (follow-up due, ghosted, interview tomorrow) — not decoration.
+- **Calm by default, alert when it matters.** Most of the UI (application lists, forms) should be quiet and neutral. Color/emphasis is reserved for things that map to an action (follow-up due, ghosted, interview tomorrow) — not decoration.
 - **No unnecessary chrome.** Consistent with the "don't build a Notion clone" principle in this PRD — the UI should avoid dense toolbars, sidebars-within-sidebars, or customization panels. Keep it closer to a focused task app than a database admin tool.
 
 ### 10.2 Color System
@@ -439,7 +403,7 @@ Use motion only where M3 recommends it for state change and hierarchy, not for d
 - **Badges** (`badge`): used for status (neutral) and health (colored, per 10.2).
 - **Timeline:** no native daisyUI timeline component maps perfectly to M3 — build a custom vertical timeline using M3 spacing/color tokens (a divider line + dot per M3's list guidance), since the Activity Timeline (§4.2) is a core, frequently-viewed element and deserves a bespoke treatment rather than a generic list. Milestone entries (status changes) need a visually distinct marker compared to regular user-logged activity entries.
 - **Modals** (`modal`): triggered on dropdown selection for status changes (§4.1) and follow-up actions (send/snooze/dismiss) — keep these short and single-purpose, consistent with M3 dialog guidance (one clear action, no multi-step forms inside a modal). Status changes are irreversible once confirmed.
-- **Forms:** M3 filled or outlined text field style, applied via daisyUI `input`/`select` variants — pick one variant and use it consistently across Create Application, Interview records, and Documents.
+- **Forms:** M3 filled or outlined text field style, applied via daisyUI `input`/`select` variants — pick one variant and use it consistently across Create Application and Interview records.
 
 ### 10.7 Accessibility Baseline
 
