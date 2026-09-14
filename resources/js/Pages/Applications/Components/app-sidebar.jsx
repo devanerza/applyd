@@ -73,13 +73,6 @@ export function AppSidebar() {
                     );
                 })}
                 <Link
-                    href={route('documents.index')}
-                    className="flex items-center gap-3 rounded-full px-4 py-3 font-body text-sm text-base-content/60 hover:bg-secondary/30 transition-colors"
-                >
-                    <FolderOpen className="h-4 w-4" />
-                    Documents
-                </Link>
-                <Link
                     href={route('profile.edit')}
                     className="flex items-center gap-3 rounded-full px-4 py-3 font-body text-sm text-base-content/60 hover:bg-secondary/30 transition-colors"
                 >
