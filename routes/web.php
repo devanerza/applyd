@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\InterviewController;
+use App\Http\Controllers\AnalyticsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [ApplicationController::class, 'dashboard'])
@@ -32,6 +33,8 @@ Route::middleware('auth')->group(function () {
         ->name('applications.interviews.update');
     Route::delete('applications/{application}/interviews/{interview}', [InterviewController::class, 'destroy'])
         ->name('applications.interviews.destroy');
+
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
 
     Route::get('/insights', function () {
         return inertia('Insights/Index');
