@@ -45,7 +45,10 @@ class Application extends Model
         return $this->hasMany(Activity::class)->orderBy('activity_date', 'desc');
     }
 
-
+    public function interviews()
+    {
+        return $this->hasMany(Interview::class)->orderBy('scheduled_at', 'desc');
+    }
 
     public function latestActivity()
     {

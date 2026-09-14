@@ -57,5 +57,8 @@ class User extends Authenticatable
         return $this->hasMany(Activity::class);
     }
 
-
+    public function interviews()
+    {
+        return $this->hasMany(Interview::class);
+    }
 }
