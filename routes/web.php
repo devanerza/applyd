@@ -34,11 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('applications/{application}/interviews/{interview}', [InterviewController::class, 'destroy'])
         ->name('applications.interviews.destroy');
 
-    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
-
-    Route::get('/insights', function () {
-        return inertia('Insights/Index');
-    })->name('insights.index');
+    Route::get('/insights', [AnalyticsController::class, 'index'])->name('insights.index');
 });
 
 require __DIR__.'/auth.php';

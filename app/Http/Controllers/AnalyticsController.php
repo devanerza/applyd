@@ -11,7 +11,7 @@ class AnalyticsController extends Controller
     {
         $service = new AnalyticsService(auth()->user());
 
-        return Inertia::render('Analytics/Index', [
+        return Inertia::render('Insights/Index', [
             'funnel' => $service->funnel(),
             'responseRate' => $service->responseRate(),
             'interviewConversion' => $service->interviewConversionRate(),
