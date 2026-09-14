@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\DocumentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [ApplicationController::class, 'dashboard'])
@@ -25,8 +24,6 @@ Route::middleware('auth')->group(function () {
         ->name('applications.activities.store');
     Route::delete('activities/{activity}', [ActivityController::class, 'destroy'])
         ->name('activities.destroy');
-
-    Route::resource('documents', DocumentController::class)->except(['show', 'edit', 'update']);
 
     Route::get('/insights', function () {
         return inertia('Insights/Index');

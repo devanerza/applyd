@@ -132,7 +132,7 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->load('activities', 'documents');
+        $application->load('activities');
 
         return Inertia::render('Applications/Show', [
             'application' => $application,
@@ -168,8 +168,6 @@ class ApplicationController extends Controller
             'employment_type' => 'nullable|in:full_time,part_time,internship,contract,freelance',
             'salary_range' => 'nullable|string|max:255',
             'source' => 'nullable|in:linkedin,company_website,job_board,referral,other',
-            'resume_version' => 'nullable|string|max:255',
-            'cover_letter_version' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
             'applied_at' => 'required|date',
             'status' => 'in:applied,screening,interviewing,offer,rejected,withdrawn,ghosted',
