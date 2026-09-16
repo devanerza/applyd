@@ -4,9 +4,7 @@ import {
     Briefcase,
     TrendingUp,
     Plus,
-    FolderOpen,
-    LogOutIcon,
-    UserIcon,
+    LogOut,
 } from 'lucide-react';
 import { useState } from 'react';
 import AddApplicationModal from './AddApplicationModal';
@@ -72,22 +70,32 @@ export function AppSidebar() {
                         </Link>
                     );
                 })}
-                <Link
-                    href={route('profile.edit')}
-                    className="flex items-center gap-3 rounded-full px-4 py-3 font-body text-sm text-base-content/60 hover:bg-secondary/30 transition-colors"
-                >
-                    <UserIcon className="h-4 w-4" />
-                    Profile
-                </Link>
-                <button
-                    type="button"
-                    onClick={() => router.post(route('logout'))}
-                    className="flex w-full items-center gap-3 rounded-full px-4 py-3 font-body text-sm text-base-content/60 hover:bg-secondary/30 transition-colors"
-                >
-                    <LogOutIcon className="h-4 w-4" />
-                    Logout
-                </button>
             </nav>
+
+            {/* Profile card */}
+            <div className="mt-auto border-t border-neutral pt-4">
+                <div className="flex items-center gap-3 rounded-2xl bg-base-200 p-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-content">
+                        {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-base-content">
+                            {user.name}
+                        </p>
+                        <p className="truncate text-xs text-base-content/50">
+                            {user.email}
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => router.post(route('logout'))}
+                        className="shrink-0 rounded-full p-2 text-base-content/40 transition-colors hover:bg-error/10 hover:text-error"
+                        title="Logout"
+                    >
+                        <LogOut className="h-4 w-4" />
+                    </button>
+                </div>
+            </div>
         </aside>
 
         {/* Rendered outside the <aside> on purpose: a fixed-position aside creates its own
