@@ -6,7 +6,7 @@ export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-base-100">
             <AppSidebar />
             <div className="ml-64">
                 {children}

@@ -3,13 +3,13 @@ import { router } from '@inertiajs/react';
 import { ChevronDown, Check } from 'lucide-react';
 
 const STATUSES = [
-    { value: 'applied', label: 'Applied', color: 'bg-gray-100 text-gray-700' },
-    { value: 'screening', label: 'Screening', color: 'bg-blue-100 text-blue-700' },
-    { value: 'interviewing', label: 'Interviewing', color: 'bg-purple-100 text-purple-700' },
-    { value: 'offer', label: 'Offer', color: 'bg-green-100 text-green-700' },
-    { value: 'rejected', label: 'Rejected', color: 'bg-red-100 text-red-700' },
-    { value: 'withdrawn', label: 'Withdrawn', color: 'bg-gray-100 text-gray-500' },
-    { value: 'ghosted', label: 'Ghosted', color: 'bg-orange-100 text-orange-700' },
+    { value: 'applied', label: 'Applied', color: 'bg-base-300 text-base-content' },
+    { value: 'screening', label: 'Screening', color: 'bg-blue-500/20 text-blue-400' },
+    { value: 'interviewing', label: 'Interviewing', color: 'bg-purple-500/20 text-purple-400' },
+    { value: 'offer', label: 'Offer', color: 'bg-success/20 text-success' },
+    { value: 'rejected', label: 'Rejected', color: 'bg-error/20 text-error' },
+    { value: 'withdrawn', label: 'Withdrawn', color: 'bg-base-300 text-base-content/50' },
+    { value: 'ghosted', label: 'Ghosted', color: 'bg-warning/20 text-warning' },
 ];
 
 export default function StatusDropdown({ applicationId, currentStatus, className = '', size = 'md' }) {
@@ -59,7 +59,7 @@ export default function StatusDropdown({ applicationId, currentStatus, className
             </button>
 
             {open && (
-                <div className="absolute right-0 z-50 mt-1 w-40 rounded-2xl border border-gray-200 bg-white py-2 shadow-lg">
+                <div className="absolute right-0 z-50 mt-1 w-40 rounded-2xl border border-base-300 bg-base-200 py-2 shadow-lg">
                     {STATUSES.map((s) => (
                         <button
                             key={s.value}
@@ -69,7 +69,7 @@ export default function StatusDropdown({ applicationId, currentStatus, className
                                 e.stopPropagation();
                                 handleChange(s.value);
                             }}
-                            className="flex w-full items-center justify-between px-4 py-2 text-left text-sm hover:bg-gray-50"
+                            className="flex w-full items-center justify-between px-4 py-2 text-left text-sm hover:bg-base-300 text-base-content"
                         >
                             <span className="capitalize">{s.label}</span>
                             {s.value === status && <Check className="h-4 w-4 text-primary" />}

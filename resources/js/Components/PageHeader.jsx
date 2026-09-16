@@ -12,11 +12,11 @@ export default function PageHeader({
     return (
         <div className="mb-8 flex justify-between items-center gap-4">
             <div>
-                <h1 className="font-headline text-2xl font-bold text-gray-900">
+                <h1 className="font-headline text-2xl font-bold text-base-content">
                     {title}
                 </h1>
                 {subtitle && (
-                    <p className="mt-1 font-body text-sm text-gray-500">
+                    <p className="mt-1 font-body text-sm text-base-content/60">
                         {subtitle}
                     </p>
                 )}
@@ -32,13 +32,13 @@ export default function PageHeader({
                         className="flex items-center"
                     >
                         <div className="relative w-72">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-base-content/40" />
                             <input
                                 type="text"
                                 value={searchValue}
                                 onChange={(e) => onSearchChange(e.target.value)}
                                 placeholder={searchPlaceholder}
-                                className="w-full rounded-full border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm outline-none focus:border-indigo-400"
+                                className="w-full rounded-full border border-base-300 bg-base-200 py-2 pl-9 pr-4 text-sm outline-none focus:border-primary text-base-content placeholder:text-base-content/40"
                             />
                         </div>
                     </form>
