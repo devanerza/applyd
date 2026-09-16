@@ -1,7 +1,7 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import PageHeader from '@/Components/PageHeader';
 import {
-    Search,
     TrendingUp,
     TrendingDown,
     Users,
@@ -33,33 +33,14 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
             <Head title="Insights" />
 
             <div className="px-10 py-8">
-                <div className="mb-8 flex items-center justify-between gap-4">
-                    <div>
-                        <h1 className="font-headline text-2xl font-bold text-gray-900">
-                            Insights
-                        </h1>
-                        <p className="mt-1 font-body text-sm text-gray-500">
-                            Track your job search performance and identify what works.
-                        </p>
-                    </div>
-                    <div className="flex items-center justify-end gap-4">
-                        <div className="relative w-72">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 z-[-100] -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Search applications..."
-                                className="w-full rounded-full border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm outline-none focus:border-indigo-400"
-                            />
-                        </div>
-                        <img
-                            src={user.avatarUrl ?? `https://i.pravatar.cc/40?img=${user.id ?? 5}`}
-                            alt={user.name}
-                            className="h-10 w-10 rounded-full ring-2 ring-primary"
-                        />
-                    </div>
-                </div>
+                <PageHeader
+                    title={`Insights`}
+                    subtitle="Track your job search performance and identify what works."
+                    searchValue={search}
+                    onSearchChange={setSearch}
+                    onSearchSubmit={() => router.get(route('applications.index'), { search }, { preserveState: true, preserveScroll: true })}
+                    searchPlaceholder="Search applications..."
+                />
 
                 {/* Key Metrics */}
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -208,11 +189,10 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
                                                     </td>
                                                     <td className="py-3 text-right">
                                                         <div className="flex items-center justify-end gap-2">
-                                                            <span className={`font-body text-sm font-semibold ${
-                                                                data.rate >= 50 ? 'text-green-600' :
-                                                                data.rate >= 25 ? 'text-yellow-600' :
-                                                                'text-gray-600'
-                                                            }`}>
+                                                            <span className={`font-body text-sm font-semibold ${data.rate >= 50 ? 'text-green-600' :
+                                                                    data.rate >= 25 ? 'text-yellow-600' :
+                                                                        'text-gray-600'
+                                                                }`}>
                                                                 {data.rate}%
                                                             </span>
                                                             {data.rate >= 25 ? (

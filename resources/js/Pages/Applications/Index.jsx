@@ -2,8 +2,8 @@ import { Head, Link, usePage, router } from '@inertiajs/react';
 import { AppSidebar } from './Components/app-sidebar';
 import StatusDropdown from '@/Components/StatusDropdown';
 import FilterDropdown from '@/Components/FilterDropdown';
+import PageHeader from '@/Components/PageHeader';
 import {
-    Search,
     SlidersHorizontal,
     CheckCircle2,
     AlertTriangle,
@@ -16,7 +16,7 @@ import { useState } from 'react';
 export default function ApplicationsIndex({ applications, filters }) {
     const user = usePage().props.auth.user;
     const [search, setSearch] = useState('');
-    
+
     const urlParams = new URLSearchParams(window.location.search);
     const currentStatus = urlParams.get('status');
     const currentSource = urlParams.get('source');
@@ -124,40 +124,24 @@ export default function ApplicationsIndex({ applications, filters }) {
                 <AppSidebar />
 
                 <main className="ml-64 flex-1 px-10 py-8">
-                    <form onSubmit={handleSearch} className="mb-8 flex items-center justify-end gap-4">
-                        <div className="relative w-72">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Search applications..."
-                                className="w-full rounded-full border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm outline-none focus:border-indigo-400"
-                            />
-                        </div>
-                        <img
-                            src={user.avatarUrl ?? `https://i.pravatar.cc/40?img=${user.id ?? 5}`}
-                            alt={user.name}
-                            className="h-10 w-10 rounded-full ring-2 ring-indigo-500"
-                        />
-                    </form>
-
-                    <h1 className="text-2xl font-bold text-gray-900">
-                        Your Applications
-                    </h1>
-                    <p className="mt-1 text-sm text-gray-500">
-                        Manage and track your job search progress.
-                    </p>
+                    <PageHeader
+                        title="Your Applications"
+                        subtitle="Manage and track your job search progress."
+                        searchValue={search}
+                        onSearchChange={setSearch}
+                        onSearchSubmit={handleSearch}
+                        searchPlaceholder="Search applications..."
+                    />
 
                     <div className="mt-6 flex flex-wrap items-center gap-3">
                         <SlidersHorizontal className="h-4 w-4 text-gray-400" />
-                        <FilterDropdown 
+                        <FilterDropdown
                             label="Status"
                             options={statusOptions}
                             currentValue={currentStatus}
                             paramName="status"
                         />
-                        <FilterDropdown 
+                        <FilterDropdown
                             label="Source"
                             options={sourceOptions}
                             currentValue={currentSource}
@@ -166,11 +150,10 @@ export default function ApplicationsIndex({ applications, filters }) {
                         <button
                             type="button"
                             onClick={toggleFollowUpDue}
-                            className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition ${
-                                followUpDue
+                            className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition ${followUpDue
                                     ? 'border-emerald-400 bg-emerald-400/20 text-emerald-700'
                                     : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
-                            }`}
+                                }`}
                         >
                             {followUpDue && <CheckCircle2 className="h-3.5 w-3.5" />}
                             Follow-up Due
@@ -208,7 +191,7 @@ export default function ApplicationsIndex({ applications, filters }) {
                                                     className={`h-5 w-5 ${style.iconColor}`}
                                                 />
                                             </div>
-                                            <StatusDropdown 
+                                            <StatusDropdown
                                                 applicationId={app.id}
                                                 currentStatus={app.status}
                                                 size="md"
@@ -256,11 +239,10 @@ export default function ApplicationsIndex({ applications, filters }) {
                                 <Link
                                     key={`page-${index}`}
                                     href={link.url ?? '#'}
-                                    className={`rounded-full px-4 py-1 text-sm ${
-                                        link.active
+                                    className={`rounded-full px-4 py-1 text-sm ${link.active
                                             ? 'bg-primary text-white'
                                             : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
-                                    }`}
+                                        }`}
                                 >
                                     <span dangerouslySetInnerHTML={{ __html: link.label }} />
                                 </Link>

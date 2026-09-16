@@ -1,8 +1,8 @@
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import StatusDropdown from '@/Components/StatusDropdown';
+import PageHeader from '@/Components/PageHeader';
 import {
-    Search,
     CheckCircle2,
     MessageCircle,
     AlertTriangle,
@@ -16,14 +16,6 @@ export default function Dashboard({ summary, needsAttention }) {
 
     const [search, setSearch] = useState('');
     const [ignoredIds, setIgnoredIds] = useState([]);
-
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        router.get(route('applications.index'), { search }, {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    };
 
     const handleIgnore = (id) => {
         setIgnoredIds((prev) => [...prev, id]);
@@ -64,36 +56,14 @@ export default function Dashboard({ summary, needsAttention }) {
             <Head title="Dashboard" />
 
             <div className="px-10 py-8">
-                {/* Top bar */}
-                <div className="mb-8 flex items-center justify-between gap-4">
-                    <div>
-                        <h1 className="font-headline text-2xl font-bold text-gray-900">
-                            Good morning, {user.name}
-                        </h1>
-                        <p className="mt-1 font-body text-sm text-gray-500">
-                            Here is an overview of your job search activities
-                            today.
-                        </p>
-                    </div>
-                    <div className="flex items-center justify-end gap-4">
-                        <div className="relative w-72">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 z-[-100] -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit(e)}
-                                placeholder="Search applications..."
-                                className="w-full rounded-full border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm outline-none focus:border-indigo-400"
-                            />
-                        </div>
-                        <img
-                            src={user.avatarUrl ?? `https://i.pravatar.cc/40?img=${user.id ?? 5}`}
-                            alt={user.name}
-                            className="h-10 w-10 rounded-full ring-2 ring-primary"
-                        />
-                    </div>
-                </div>
+                <PageHeader
+                    title={`Good morning, ${user.name}`}
+                    subtitle="Here is an overview of your job search activities today."
+                    searchValue={search}
+                    onSearchChange={setSearch}
+                    onSearchSubmit={() => router.get(route('applications.index'), { search }, { preserveState: true, preserveScroll: true })}
+                    searchPlaceholder="Search applications..."
+                />
 
                 {/* Stat cards */}
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
