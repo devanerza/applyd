@@ -11,8 +11,6 @@ export default function AddApplicationModal({ isOpen, onClose }) {
         employment_type: '',
         salary_range: '',
         source: '',
-        resume_version: '',
-        cover_letter_version: '',
         notes: '',
         applied_at: new Date().toISOString().split('T')[0],
         status: 'applied',
@@ -211,44 +209,6 @@ export default function AddApplicationModal({ isOpen, onClose }) {
                                     <span className="label-text-alt text-error">{errors.applied_at}</span>
                                 </label>
                             )}
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Resume Version</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    value={data.resume_version}
-                                    onChange={(e) => setData('resume_version', e.target.value)}
-                                    placeholder="v3"
-                                    className="input input-bordered w-full"
-                                />
-                                {errors.resume_version && (
-                                    <label className="label">
-                                        <span className="label-text-alt text-error">{errors.resume_version}</span>
-                                    </label>
-                                )}
-                            </div>
-
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Cover Letter Version</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    value={data.cover_letter_version}
-                                    onChange={(e) => setData('cover_letter_version', e.target.value)}
-                                    placeholder="v2"
-                                    className="input input-bordered w-full"
-                                />
-                                {errors.cover_letter_version && (
-                                    <label className="label">
-                                        <span className="label-text-alt text-error">{errors.cover_letter_version}</span>
-                                    </label>
-                                )}
-                            </div>
                         </div>
 
                         <div className="divider">Recruiter Contact (Optional)</div>
