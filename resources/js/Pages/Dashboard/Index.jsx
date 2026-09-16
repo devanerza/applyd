@@ -30,24 +30,31 @@ export default function Dashboard({ summary, needsAttention }) {
             label: 'Active Applications',
             value: summary?.active ?? 0,
             icon: CheckCircle2,
-            bg: 'bg-secondary',
-            iconBg: 'bg-secondary-content',
-            labelColor: 'text-secondary-content',
+            bg: 'bg-primary',
+            iconBg: 'bg-primary-content',
+            iconColor: 'text-primary',
+            labelColor: 'text-primary-content/70',
+            valueColor: 'text-primary-content',
         },
         {
             label: 'Waiting for response',
             value: summary?.waiting ?? 0,
             icon: MessageCircle,
-            bg: 'bg-neutral',
-            iconBg: 'bg-neutral-content',
+            bg: 'bg-secondary',
+            iconBg: 'bg-secondary-content',
+            iconColor: 'text-secondary',
+            labelColor: 'text-secondary-content/70',
+            valueColor: 'text-secondary-content',
         },
         {
             label: 'Likely ghosted',
             value: summary?.ghosted ?? 0,
             icon: AlertTriangle,
-            bg: 'bg-warning',
-            iconBg: 'bg-warning-content',
-            labelColor: 'text-warning-content',
+            bg: 'bg-accent',
+            iconBg: 'bg-white',
+            iconColor: 'text-accent',
+            labelColor: 'text-white/80',
+            valueColor: 'text-white',
         },
     ];
 
@@ -72,20 +79,20 @@ export default function Dashboard({ summary, needsAttention }) {
                         return (
                             <div
                                 key={stat.label}
-                                className={`flex items-center gap-4 rounded-3xl ${stat.bg} px-6 py-5`}
+                                className={`flex items-center gap-4 rounded-3xl ${stat.bg} p-6`}
                             >
                                 <div
-                                    className={`flex h-10 w-10 items-center justify-center rounded-full ${stat.iconBg}`}
+                                    className={`flex h-12 w-12 items-center justify-center rounded-full ${stat.iconBg}`}
                                 >
-                                    <Icon className="h-5 w-5 text-white" />
+                                    <Icon className={`h-6 w-6 ${stat.iconColor ?? 'text-white'}`} />
                                 </div>
                                 <div>
                                     <p
-                                        className={`font-headline text-sm font-bold tracking-wide uppercase ${stat.labelColor ?? 'text-gray-700'}`}
+                                        className={`font-body text-sm ${stat.labelColor ?? 'text-base-content/60'}`}
                                     >
                                         {stat.label}
                                     </p>
-                                    <p className="font-body text-md text-gray-900">
+                                    <p className={`font-headline text-3xl font-bold ${stat.valueColor ?? 'text-base-content'}`}>
                                         {String(stat.value).padStart(2, '0')}
                                     </p>
                                 </div>
@@ -99,8 +106,8 @@ export default function Dashboard({ summary, needsAttention }) {
                     {/* Needs attention */}
                     <div className="lg:col-span-2">
                         <div className="mb-4 flex items-center justify-between">
-                            <h2 className="font-headline flex items-center gap-2 text-lg font-bold text-gray-900">
-                                <AlertTriangle className="h-4 w-4 text-indigo-600" />
+                            <h2 className="font-headline flex items-center gap-2 text-lg font-bold text-base-content">
+                                <AlertTriangle className="h-4 w-4 text-primary" />
                                 Needs attention
                             </h2>
                             <Link
@@ -113,8 +120,8 @@ export default function Dashboard({ summary, needsAttention }) {
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             {visible.length === 0 ? (
-                                <div className="col-span-2 rounded-3xl border-2 border-dashed border-gray-300 p-8 text-center">
-                                    <p className="mb-2 text-lg font-bold text-gray-700">No applications need attention</p>
+                                <div className="col-span-2 rounded-3xl border-2 border-dashed border-base-300 p-8 text-center">
+                                    <p className="mb-2 text-lg font-bold text-base-content/80">No applications need attention</p>
                                     <Link
                                         href={route('applications.create')}
                                         className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90"
@@ -129,7 +136,7 @@ export default function Dashboard({ summary, needsAttention }) {
                                         className="rounded-3xl bg-accent p-5"
                                     >
                                         <div className="flex items-start justify-between">
-                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
+                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-base-200">
                                                 <Building2 className="h-5 w-5 text-primary" />
                                             </div>
                                             <StatusDropdown 
@@ -139,10 +146,10 @@ export default function Dashboard({ summary, needsAttention }) {
                                             />
                                         </div>
 
-                                        <p className="font-headline mt-4 font-bold text-indigo-900">
+                                        <p className="font-headline mt-4 font-bold text-accent-content">
                                             {app.role_title}
                                         </p>
-                                        <p className="text-sm text-indigo-800/80">
+                                        <p className="text-sm text-accent-content/80">
                                             {app.company_name}
                                         </p>
 
@@ -159,7 +166,7 @@ export default function Dashboard({ summary, needsAttention }) {
                                                     <button
                                                         disabled
                                                         title="Add recruiter contact to enable follow-ups"
-                                                        className="font-body rounded-full px-4 py-2 text-xs font-semibold bg-gray-300 text-gray-500 cursor-not-allowed opacity-50"
+                                                        className="font-body rounded-full px-4 py-2 text-xs font-semibold bg-base-300 text-base-content/50 cursor-not-allowed opacity-50"
                                                     >
                                                         Follow up
                                                     </button>
@@ -180,8 +187,8 @@ export default function Dashboard({ summary, needsAttention }) {
 
                     {/* Upcoming — placeholder until Interview model exists */}
                     <div>
-                        <h2 className="font-headline mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
-                            <CalendarClock className="h-4 w-4 text-indigo-600" />
+                        <h2 className="font-headline mb-4 flex items-center gap-2 text-lg font-bold text-base-content">
+                            <CalendarClock className="h-4 w-4 text-primary" />
                             Upcoming
                         </h2>
 
@@ -193,7 +200,7 @@ export default function Dashboard({ summary, needsAttention }) {
                             <p className="font-headline mt-3 font-bold">
                                 No upcoming interviews
                             </p>
-                            <p className="text-sm text-emerald-950/80">
+                            <p className="text-sm text-secondary-content/70">
                                 Add interviews to see them here.
                             </p>
                         </div>

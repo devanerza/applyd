@@ -97,22 +97,22 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
                 <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {/* Application Funnel */}
                     <div>
-                        <h2 className="font-headline mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
+                        <h2 className="font-headline mb-4 flex items-center gap-2 text-lg font-bold text-base-content">
                             <TrendingUp className="h-5 w-5 text-primary" />
                             Application Funnel
                         </h2>
 
-                        <div className="rounded-3xl bg-white p-6 border border-gray-200">
+                        <div className="rounded-3xl bg-base-200 p-6 border border-base-300">
                             {totalApplications === 0 ? (
                                 <div className="py-8 text-center">
-                                    <p className="text-gray-500">No application data yet</p>
+                                    <p className="text-base-content/60">No application data yet</p>
                                 </div>
                             ) : (
                                 <div className="space-y-4">
                                     {[
-                                        { key: 'applied', label: 'Applied', color: 'bg-gray-400' },
+                                        { key: 'applied', label: 'Applied', color: 'bg-base-content/40' },
                                         { key: 'screening', label: 'Screening', color: 'bg-blue-500' },
-                                        { key: 'interviewing', label: 'Interviewing', color: 'bg-indigo-600' },
+                                        { key: 'interviewing', label: 'Interviewing', color: 'bg-primary' },
                                         { key: 'offer', label: 'Offer', color: 'bg-green-500' },
                                     ].map((stage) => {
                                         const count = funnel[stage.key];
@@ -123,14 +123,14 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
                                         return (
                                             <div key={stage.key}>
                                                 <div className="mb-2 flex items-center justify-between">
-                                                    <span className="font-body text-sm font-semibold text-gray-700">
+                                                    <span className="font-body text-sm font-semibold text-base-content">
                                                         {stage.label}
                                                     </span>
-                                                    <span className="font-body text-sm text-gray-500">
+                                                    <span className="font-body text-sm text-base-content/60">
                                                         {count} ({percentage}%)
                                                     </span>
                                                 </div>
-                                                <div className="h-3 rounded-full bg-gray-100">
+                                                <div className="h-3 rounded-full bg-base-300">
                                                     <div
                                                         className={`h-3 rounded-full ${stage.color} transition-all duration-500`}
                                                         style={{ width: `${percentage}%` }}
@@ -146,59 +146,59 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
 
                     {/* Source Effectiveness */}
                     <div>
-                        <h2 className="font-headline mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
+                        <h2 className="font-headline mb-4 flex items-center gap-2 text-lg font-bold text-base-content">
                             <Users className="h-5 w-5 text-primary" />
                             Source Effectiveness
                         </h2>
 
-                        <div className="rounded-3xl bg-white p-6 border border-gray-200">
+                        <div className="rounded-3xl bg-base-200 p-6 border border-base-300">
                             {sortedSources.length === 0 || sortedSources.every(([, data]) => data.total === 0) ? (
                                 <div className="py-8 text-center">
-                                    <p className="text-gray-500">No source data yet</p>
+                                    <p className="text-base-content/60">No source data yet</p>
                                 </div>
                             ) : (
                                 <div className="overflow-x-auto">
                                     <table className="table w-full">
                                         <thead>
-                                            <tr className="border-b border-gray-200">
-                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+                                            <tr className="border-b border-base-300">
+                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/60">
                                                     Source
                                                 </th>
-                                                <th className="font-body text-center text-xs font-semibold uppercase tracking-wide text-gray-600">
+                                                <th className="font-body text-center text-xs font-semibold uppercase tracking-wide text-base-content/60">
                                                     Applications
                                                 </th>
-                                                <th className="font-body text-center text-xs font-semibold uppercase tracking-wide text-gray-600">
+                                                <th className="font-body text-center text-xs font-semibold uppercase tracking-wide text-base-content/60">
                                                     Interviews
                                                 </th>
-                                                <th className="font-body text-right text-xs font-semibold uppercase tracking-wide text-gray-600">
+                                                <th className="font-body text-right text-xs font-semibold uppercase tracking-wide text-base-content/60">
                                                     Rate
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {sortedSources.map(([source, data]) => (
-                                                <tr key={source} className="border-b border-gray-100 hover:bg-gray-50">
-                                                    <td className="font-body py-3 text-sm font-medium text-gray-900">
+                                                <tr key={source} className="border-b border-base-300 hover:bg-base-300/50">
+                                                    <td className="font-body py-3 text-sm font-medium text-base-content">
                                                         {sourceLabels[source]}
                                                     </td>
-                                                    <td className="font-body py-3 text-center text-sm text-gray-600">
+                                                    <td className="font-body py-3 text-center text-sm text-base-content/70">
                                                         {data.total}
                                                     </td>
-                                                    <td className="font-body py-3 text-center text-sm text-gray-600">
+                                                    <td className="font-body py-3 text-center text-sm text-base-content/70">
                                                         {data.interviews}
                                                     </td>
                                                     <td className="py-3 text-right">
                                                         <div className="flex items-center justify-end gap-2">
-                                                            <span className={`font-body text-sm font-semibold ${data.rate >= 50 ? 'text-green-600' :
-                                                                    data.rate >= 25 ? 'text-yellow-600' :
-                                                                        'text-gray-600'
+                                                            <span className={`font-body text-sm font-semibold ${data.rate >= 50 ? 'text-success' :
+                                                                    data.rate >= 25 ? 'text-warning' :
+                                                                        'text-base-content/50'
                                                                 }`}>
                                                                 {data.rate}%
                                                             </span>
                                                             {data.rate >= 25 ? (
-                                                                <TrendingUp className="h-4 w-4 text-green-500" />
+                                                                <TrendingUp className="h-4 w-4 text-success" />
                                                             ) : (
-                                                                <TrendingDown className="h-4 w-4 text-gray-400" />
+                                                                <TrendingDown className="h-4 w-4 text-base-content/40" />
                                                             )}
                                                         </div>
                                                     </td>
