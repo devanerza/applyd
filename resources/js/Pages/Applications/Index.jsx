@@ -120,7 +120,7 @@ export default function ApplicationsIndex({ applications, filters }) {
         <>
             <Head title="Applications" />
 
-            <div className="flex min-h-screen" style={{ background: 'linear-gradient(165deg, color-mix(in srgb, var(--p) 6%, var(--b1)) 0%, var(--b1) 40%, color-mix(in srgb, var(--p) 3%, var(--b1)) 100%)' }}>
+            <div className="flex min-h-screen" style={{ background: 'linear-gradient(165deg, color-mix(in srgb, var(--p) 15%, var(--b1)) 0%, var(--b1) 50%, color-mix(in srgb, var(--p) 8%, var(--b1)) 100%)' }}>
                 <AppSidebar />
 
                 <main className="ml-64 flex-1 px-10 py-8">
