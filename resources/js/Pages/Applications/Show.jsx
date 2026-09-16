@@ -30,23 +30,23 @@ export default function Show({ application, nextAction }) {
 
     const getStatusColor = (status) => {
         const colors = {
-            applied: 'bg-gray-100 text-gray-700',
-            screening: 'bg-blue-100 text-blue-700',
-            interviewing: 'bg-purple-100 text-purple-700',
-            offer: 'bg-green-100 text-green-700',
-            rejected: 'bg-red-100 text-red-700',
-            withdrawn: 'bg-gray-100 text-gray-500',
-            ghosted: 'bg-orange-100 text-orange-700',
+            applied: 'bg-base-300 text-base-content',
+            screening: 'bg-blue-500/20 text-blue-400',
+            interviewing: 'bg-purple-500/20 text-purple-400',
+            offer: 'bg-success/20 text-success',
+            rejected: 'bg-error/20 text-error',
+            withdrawn: 'bg-base-300 text-base-content/50',
+            ghosted: 'bg-warning/20 text-warning',
         };
         return colors[status] || colors.applied;
     };
 
     const getHealthColor = (health) => {
         const colors = {
-            healthy: 'bg-emerald-100 text-emerald-700',
-            needs_attention: 'bg-amber-100 text-amber-700',
-            stale: 'bg-orange-100 text-orange-700',
-            ghosted: 'bg-red-100 text-red-700',
+            healthy: 'bg-success/20 text-success',
+            needs_attention: 'bg-warning/20 text-warning',
+            stale: 'bg-error/20 text-error',
+            ghosted: 'bg-error text-error-content',
         };
         return colors[health] || colors.healthy;
     };
@@ -69,12 +69,12 @@ export default function Show({ application, nextAction }) {
 
             <div className="px-10 py-8">
                 {/* Breadcrumb */}
-                <div className="mb-6 flex items-center gap-2 text-sm text-gray-500">
+                <div className="mb-6 flex items-center gap-2 text-sm text-base-content/50">
                     <Link href={route('applications.index')} className="hover:text-primary">
                         Applications
                     </Link>
                     <span>›</span>
-                    <span className="text-gray-900">{application.company_name}</span>
+                    <span className="text-base-content">{application.company_name}</span>
                 </div>
 
                 {/* Header */}
@@ -84,10 +84,10 @@ export default function Show({ application, nextAction }) {
                             <Building2 className="h-8 w-8 text-primary" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900">
+                            <h1 className="text-3xl font-bold text-base-content">
                                 {application.company_name}
                             </h1>
-                            <p className="mt-1 text-xl text-gray-600">
+                            <p className="mt-1 text-xl text-base-content/70">
                                 {application.role_title}
                             </p>
                             <div className="mt-3 flex items-center gap-3">
@@ -109,14 +109,14 @@ export default function Show({ application, nextAction }) {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setShowEditModal(true)}
-                            className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                            className="flex items-center gap-2 rounded-full border border-base-300 bg-base-200 px-4 py-2 text-sm font-medium text-base-content hover:bg-base-300"
                         >
                             <Edit className="h-4 w-4" />
                             Edit
                         </button>
                         <button
                             onClick={() => setShowFollowUpModal(true)}
-                            className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
+                            className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-content hover:bg-primary/90"
                         >
                             <Plus className="h-4 w-4" />
                             Add activity
@@ -127,7 +127,7 @@ export default function Show({ application, nextAction }) {
                                     router.delete(route('applications.destroy', application.id));
                                 }
                             }}
-                            className="flex items-center gap-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                            className="flex items-center gap-2 rounded-full border border-error/30 bg-base-200 px-4 py-2 text-sm font-medium text-error hover:bg-error/10"
                         >
                             Delete
                         </button>
@@ -155,16 +155,16 @@ export default function Show({ application, nextAction }) {
                     {/* Left Column - Details + Recruiter */}
                     <div className="space-y-6 lg:col-span-2">
                         {/* Application Details Card */}
-                        <div className="rounded-3xl border border-gray-200 bg-white p-6">
-                            <div className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
+                        <div className="rounded-3xl border border-base-300 bg-base-200 p-6">
+                            <div className="mb-4 flex items-center gap-2 text-lg font-bold text-base-content">
                                 <FileText className="h-5 w-5 text-primary" />
                                 Details
                             </div>
                             <div className="grid grid-cols-2 gap-6">
                                 <div>
-                                    <p className="mb-1 text-sm text-gray-500">Applied Date</p>
-                                    <p className="flex items-center gap-2 text-gray-900">
-                                        <Calendar className="h-4 w-4 text-gray-400" />
+                                    <p className="mb-1 text-sm text-base-content/50">Applied Date</p>
+                                    <p className="flex items-center gap-2 text-base-content">
+                                        <Calendar className="h-4 w-4 text-base-content/40" />
                                         {new Date(application.applied_at).toLocaleDateString('en-US', {
                                             year: 'numeric',
                                             month: 'short',
@@ -174,8 +174,8 @@ export default function Show({ application, nextAction }) {
                                 </div>
                                 {application.source && (
                                     <div>
-                                        <p className="mb-1 text-sm text-gray-500">Source</p>
-                                        <p className="flex items-center gap-2 text-gray-900">
+                                        <p className="mb-1 text-sm text-base-content/50">Source</p>
+                                        <p className="flex items-center gap-2 text-base-content">
                                             <Linkedin className="h-4 w-4 text-primary" />
                                             {application.source}
                                         </p>
@@ -183,18 +183,18 @@ export default function Show({ application, nextAction }) {
                                 )}
                                 {application.location && (
                                     <div>
-                                        <p className="mb-1 text-sm text-gray-500">Location</p>
-                                        <p className="flex items-center gap-2 text-gray-900">
-                                            <MapPin className="h-4 w-4 text-gray-400" />
+                                        <p className="mb-1 text-sm text-base-content/50">Location</p>
+                                        <p className="flex items-center gap-2 text-base-content">
+                                            <MapPin className="h-4 w-4 text-base-content/40" />
                                             {application.location}
                                         </p>
                                     </div>
                                 )}
                                 {application.salary_range && (
                                     <div>
-                                        <p className="mb-1 text-sm text-gray-500">Salary Expectation</p>
-                                        <p className="flex items-center gap-2 text-gray-900">
-                                            <DollarSign className="h-4 w-4 text-gray-400" />
+                                        <p className="mb-1 text-sm text-base-content/50">Salary Expectation</p>
+                                        <p className="flex items-center gap-2 text-base-content">
+                                            <DollarSign className="h-4 w-4 text-base-content/40" />
                                             {application.salary_range}
                                         </p>
                                     </div>
@@ -204,9 +204,9 @@ export default function Show({ application, nextAction }) {
 
                         {/* Recruiter Contact Card */}
                         {hasRecruiterContact ? (
-                            <div className="rounded-3xl border border-gray-200 bg-white p-6">
+                            <div className="rounded-3xl border border-base-300 bg-base-200 p-6">
                                 <div className="mb-4 flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-lg font-bold text-gray-900">
+                                    <div className="flex items-center gap-2 text-lg font-bold text-base-content">
                                         <User className="h-5 w-5 text-primary" />
                                         Recruiter Contact
                                     </div>
@@ -217,15 +217,15 @@ export default function Show({ application, nextAction }) {
                                 <div className="space-y-3">
                                     {application.recruiter_name && (
                                         <div className="flex items-center gap-3">
-                                            <User className="h-4 w-4 text-gray-400" />
-                                            <span className="text-gray-900">
+                                            <User className="h-4 w-4 text-base-content/40" />
+                                            <span className="text-base-content">
                                                 {application.recruiter_name}
                                             </span>
                                         </div>
                                     )}
                                     {application.recruiter_email && (
                                         <div className="flex items-center gap-3">
-                                            <Mail className="h-4 w-4 text-gray-400" />
+                                            <Mail className="h-4 w-4 text-base-content/40" />
                                             <a
                                                 href={`mailto:${application.recruiter_email}`}
                                                 className="text-primary hover:underline"
@@ -236,10 +236,10 @@ export default function Show({ application, nextAction }) {
                                     )}
                                     {application.recruiter_phone && (
                                         <div className="flex items-center gap-3">
-                                            <Phone className="h-4 w-4 text-gray-400" />
+                                            <Phone className="h-4 w-4 text-base-content/40" />
                                             <a
                                                 href={`tel:${application.recruiter_phone}`}
-                                                className="text-gray-900"
+                                                className="text-base-content"
                                             >
                                                 {application.recruiter_phone}
                                             </a>
@@ -247,7 +247,7 @@ export default function Show({ application, nextAction }) {
                                     )}
                                     {application.recruiter_linkedin && (
                                         <div className="flex items-center gap-3">
-                                            <Linkedin className="h-4 w-4 text-gray-400" />
+                                            <Linkedin className="h-4 w-4 text-base-content/40" />
                                             <a
                                                 href={application.recruiter_linkedin}
                                                 target="_blank"
@@ -265,21 +265,21 @@ export default function Show({ application, nextAction }) {
                                 <div className="mt-4 flex items-center gap-3">
                                     <button
                                         onClick={() => setShowFollowUpModal(true)}
-                                        className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90"
+                                        className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-content hover:bg-primary/90"
                                     >
                                         Follow up
                                     </button>
                                 </div>
                             </div>
                         ) : (
-                            <div className="rounded-3xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
-                                <User className="mx-auto mb-3 h-8 w-8 text-gray-400" />
-                                <p className="mb-3 text-sm text-gray-600">
+                            <div className="rounded-3xl border border-dashed border-base-300 bg-base-300/30 p-6 text-center">
+                                <User className="mx-auto mb-3 h-8 w-8 text-base-content/40" />
+                                <p className="mb-3 text-sm text-base-content/60">
                                     No recruiter contact yet
                                 </p>
                                 <button
                                     onClick={() => setShowEditModal(true)}
-                                    className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                    className="inline-flex items-center gap-2 rounded-full border border-base-300 bg-base-200 px-4 py-2 text-sm font-medium text-base-content hover:bg-base-300"
                                 >
                                     <Plus className="h-4 w-4" />
                                     Add contact
@@ -293,7 +293,7 @@ export default function Show({ application, nextAction }) {
                     {/* Right Column - Activity Timeline */}
                     <div className="lg:col-span-1">
                         <div className="sticky top-8 rounded-3xl bg-primary/10 p-6">
-                            <div className="mb-6 flex items-center gap-2 text-lg font-bold text-gray-900">
+                            <div className="mb-6 flex items-center gap-2 text-lg font-bold text-base-content">
                                 <Clock className="h-5 w-5 text-primary" />
                                 Activity Timeline
                             </div>
@@ -307,10 +307,10 @@ export default function Show({ application, nextAction }) {
                                             )}
                                             <div className="flex gap-4">
                                                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary">
-                                                    <div className="h-2 w-2 rounded-full bg-white"></div>
+                                                    <div className="h-2 w-2 rounded-full bg-primary-content"></div>
                                                 </div>
                                                 <div className="flex-1">
-                                                    <p className="text-xs text-gray-500">
+                                                    <p className="text-xs text-base-content/50">
                                                         {new Date(
                                                             activity.activity_date
                                                         ).toLocaleDateString('en-US', {
@@ -318,12 +318,12 @@ export default function Show({ application, nextAction }) {
                                                             day: 'numeric',
                                                         })}
                                                     </p>
-                                                    <div className="mt-2 rounded-2xl bg-white p-4">
-                                                        <p className="font-semibold text-gray-900">
+                                                    <div className="mt-2 rounded-2xl bg-base-200 p-4">
+                                                        <p className="font-semibold text-base-content">
                                                             {activity.title}
                                                         </p>
                                                         {activity.description && (
-                                                            <p className="mt-1 text-sm text-gray-600">
+                                                            <p className="mt-1 text-sm text-base-content/70">
                                                                 {activity.description}
                                                             </p>
                                                         )}
@@ -335,8 +335,8 @@ export default function Show({ application, nextAction }) {
                                 </div>
                             ) : (
                                 <div className="text-center">
-                                    <Clock className="mx-auto mb-3 h-12 w-12 text-gray-300" />
-                                    <p className="text-sm text-gray-500">No activities yet</p>
+                                    <Clock className="mx-auto mb-3 h-12 w-12 text-base-content/30" />
+                                    <p className="text-sm text-base-content/50">No activities yet</p>
                                 </div>
                             )}
                         </div>

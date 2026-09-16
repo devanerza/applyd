@@ -31,15 +31,15 @@ export default function FollowUpModal({ application, show, onClose }) {
 
             {/* Modal */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-xl">
+                <div className="w-full max-w-lg rounded-3xl bg-base-200 p-6 shadow-xl">
                     {/* Header */}
                     <div className="mb-6 flex items-center justify-between">
-                        <h2 className="text-xl font-bold text-gray-900">
+                        <h2 className="text-xl font-bold text-base-content">
                             Log Follow-up
                         </h2>
                         <button
                             onClick={onClose}
-                            className="rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                            className="rounded-full p-2 text-base-content/40 hover:bg-base-300 hover:text-base-content/70"
                         >
                             <X className="h-5 w-5" />
                         </button>
@@ -48,35 +48,35 @@ export default function FollowUpModal({ application, show, onClose }) {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Title */}
                         <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">
+                            <label className="mb-2 block text-sm font-medium text-base-content/70">
                                 Title
                             </label>
                             <input
                                 type="text"
                                 value={data.title}
                                 onChange={(e) => setData('title', e.target.value)}
-                                className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                className="w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2 text-base-content focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                                 required
                             />
                             {errors.title && (
-                                <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+                                <p className="mt-1 text-sm text-error">{errors.title}</p>
                             )}
                         </div>
 
                         {/* Description */}
                         <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">
+                            <label className="mb-2 block text-sm font-medium text-base-content/70">
                                 Notes / Message
                             </label>
                             <textarea
                                 value={data.description}
                                 onChange={(e) => setData('description', e.target.value)}
                                 rows={4}
-                                className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                className="w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2 text-base-content focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                                 placeholder="What did you say? Any responses?"
                             />
                             {errors.description && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="mt-1 text-sm text-error">
                                     {errors.description}
                                 </p>
                             )}
@@ -84,18 +84,18 @@ export default function FollowUpModal({ application, show, onClose }) {
 
                         {/* Date */}
                         <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">
+                            <label className="mb-2 block text-sm font-medium text-base-content/70">
                                 Date
                             </label>
                             <input
                                 type="date"
                                 value={data.activity_date}
                                 onChange={(e) => setData('activity_date', e.target.value)}
-                                className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                className="w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2 text-base-content focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                                 required
                             />
                             {errors.activity_date && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="mt-1 text-sm text-error">
                                     {errors.activity_date}
                                 </p>
                             )}
@@ -106,14 +106,14 @@ export default function FollowUpModal({ application, show, onClose }) {
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="rounded-full px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                className="rounded-full px-5 py-2 text-sm font-medium text-base-content/70 hover:bg-base-300"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
+                                className="flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-content hover:bg-primary/90 disabled:opacity-50"
                             >
                                 <Send className="h-4 w-4" />
                                 {processing ? 'Saving...' : 'Log follow-up'}
