@@ -30,8 +30,8 @@ export const columns = [
             const application = row.original;
             return (
                 <div className="py-3">
-                    <h2 className="font-headline text-lg font-bold">{application.role_title}</h2>
-                    <p className="font-label text-xs tracking-wide uppercase text-gray-500">{application.company_name}</p>
+                    <h2 className="font-headline text-lg font-bold text-base-content">{application.role_title}</h2>
+                    <p className="font-label text-xs tracking-wide uppercase text-base-content/50">{application.company_name}</p>
                 </div>
             );
         },
@@ -41,13 +41,13 @@ export const columns = [
         header: "URL",
         cell: ({ row }) => {
             const application = row.original;
-            if (application.job_url == null) return <p className="opacity-30">No Link Provided</p>;
+            if (application.job_url == null) return <p className="opacity-30 text-base-content/40">No Link Provided</p>;
             return (
                 <a
                     href={application.job_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline font-medium flex"
+                    className="text-primary hover:underline font-medium flex"
                 >
                     View Post <ExternalLink className="ml-1 size-4" />
                 </a>
@@ -68,7 +68,7 @@ export const columns = [
                 <select
                     value={application.status}
                     onChange={(e) => handleStatusChange(e.target.value)}
-                    className="select select-bordered select-sm"
+                    className="select select-bordered select-sm bg-base-200 text-base-content border-base-300"
                 >
                     <option value="applied">Applied</option>
                     <option value="screening">Screening</option>

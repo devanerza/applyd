@@ -61,7 +61,7 @@ export default function EditApplicationModal({ isOpen, onClose, application }) {
         <>
             <div className="fixed inset-0 z-[9998] bg-black/50" onClick={onClose} />
             <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
-                <div className="modal-box max-w-2xl max-h-[90vh] overflow-y-auto bg-white relative shadow-2xl rounded-2xl pointer-events-auto">
+                <div className="modal-box max-w-2xl max-h-[90vh] overflow-y-auto bg-base-200 relative shadow-2xl rounded-2xl pointer-events-auto">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-bold">Edit Application</h3>
                         <button

@@ -79,7 +79,7 @@ export default function ApplicationsIndex({ applications, filters }) {
             action: 'bg-warning hover:bg-warning/80 text-warning-content',
         },
         healthy: {
-            card: 'bg-success/10',
+            card: 'bg-secondary/20',
             iconWrap: 'bg-success',
             iconColor: 'text-success-content',
             badge: 'bg-neutral/10 text-neutral-content',
@@ -120,7 +120,7 @@ export default function ApplicationsIndex({ applications, filters }) {
         <>
             <Head title="Applications" />
 
-            <div className="flex min-h-screen bg-gray-50">
+            <div className="flex min-h-screen bg-base-100">
                 <AppSidebar />
 
                 <main className="ml-64 flex-1 px-10 py-8">
@@ -134,7 +134,7 @@ export default function ApplicationsIndex({ applications, filters }) {
                     />
 
                     <div className="mt-6 flex flex-wrap items-center gap-3">
-                        <SlidersHorizontal className="h-4 w-4 text-gray-400" />
+                        <SlidersHorizontal className="h-4 w-4 text-base-content/40" />
                         <FilterDropdown
                             label="Status"
                             options={statusOptions}
@@ -151,8 +151,8 @@ export default function ApplicationsIndex({ applications, filters }) {
                             type="button"
                             onClick={toggleFollowUpDue}
                             className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition ${followUpDue
-                                    ? 'border-emerald-400 bg-emerald-400/20 text-emerald-700'
-                                    : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+                                    ? 'border-primary/40 bg-primary/20 text-primary'
+                                    : 'border-base-300 bg-base-200 text-base-content/70 hover:bg-base-300'
                                 }`}
                         >
                             {followUpDue && <CheckCircle2 className="h-3.5 w-3.5" />}
@@ -161,12 +161,12 @@ export default function ApplicationsIndex({ applications, filters }) {
                     </div>
 
                     {items.length === 0 ? (
-                        <div className="mt-6 rounded-3xl border-2 border-dashed border-gray-300 p-12 text-center">
-                            <Building2 className="mx-auto mb-4 h-12 w-12 text-gray-300" />
-                            <p className="mb-2 text-lg font-bold text-gray-700">No applications found</p>
+                        <div className="mt-6 rounded-3xl border-2 border-dashed border-base-300 p-12 text-center">
+                            <Building2 className="mx-auto mb-4 h-12 w-12 text-base-content/30" />
+                            <p className="mb-2 text-lg font-bold text-base-content/80">No applications found</p>
                             <Link
                                 href={route('applications.create')}
-                                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90"
+                                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-content hover:bg-primary/90"
                             >
                                 Create application
                             </Link>
@@ -240,8 +240,8 @@ export default function ApplicationsIndex({ applications, filters }) {
                                     key={`page-${index}`}
                                     href={link.url ?? '#'}
                                     className={`rounded-full px-4 py-1 text-sm ${link.active
-                                            ? 'bg-primary text-white'
-                                            : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+                                            ? 'bg-primary text-primary-content'
+                                            : 'border border-base-300 bg-base-200 text-base-content/70 hover:bg-base-300'
                                         }`}
                                 >
                                     <span dangerouslySetInnerHTML={{ __html: link.label }} />
