@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import FollowUpModal from './Components/FollowUpModal';
+import EditApplicationModal from './Components/dialog-edit';
 import StatusDropdown from '@/Components/StatusDropdown';
 import {
     Building2,
@@ -22,6 +23,7 @@ import { useState } from 'react';
 
 export default function Show({ application, nextAction }) {
     const [showFollowUpModal, setShowFollowUpModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     const hasRecruiterContact =
         application.recruiter_name || application.recruiter_email;
@@ -57,6 +59,12 @@ export default function Show({ application, nextAction }) {
                 application={application}
                 show={showFollowUpModal}
                 onClose={() => setShowFollowUpModal(false)}
+            />
+
+            <EditApplicationModal
+                isOpen={showEditModal}
+                onClose={() => setShowEditModal(false)}
+                application={application}
             />
 
             <div className="px-10 py-8">
@@ -99,13 +107,13 @@ export default function Show({ application, nextAction }) {
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
-                        <Link
-                            href={route('applications.edit', application.id)}
+                        <button
+                            onClick={() => setShowEditModal(true)}
                             className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                         >
                             <Edit className="h-4 w-4" />
                             Edit
-                        </Link>
+                        </button>
                         <button
                             onClick={() => setShowFollowUpModal(true)}
                             className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
@@ -269,13 +277,13 @@ export default function Show({ application, nextAction }) {
                                 <p className="mb-3 text-sm text-gray-600">
                                     No recruiter contact yet
                                 </p>
-                                <Link
-                                    href={route('applications.edit', application.id)}
+                                <button
+                                    onClick={() => setShowEditModal(true)}
                                     className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                                 >
                                     <Plus className="h-4 w-4" />
                                     Add contact
-                                </Link>
+                                </button>
                             </div>
                         )}
 

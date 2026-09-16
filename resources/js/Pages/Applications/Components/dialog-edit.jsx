@@ -1,311 +1,346 @@
 import { useForm } from '@inertiajs/react';
-import { useState } from 'react';
+import { X } from 'lucide-react';
+import { useEffect } from 'react';
 
-export function EditApplicationDialog({ application }) {
-    const [open, setOpen] = useState(false);
-
-    const { data, setData, patch, processing, errors } = useForm({
+export default function EditApplicationModal({ isOpen, onClose, application }) {
+    const { data, setData, patch, processing, errors, reset } = useForm({
         company_name: application?.company_name || '',
         role_title: application?.role_title || '',
         job_url: application?.job_url || '',
-        applied_at: application?.applied_at || new Date().toISOString().split('T')[0],
-        status: application?.status || 'applied',
         location: application?.location || '',
         employment_type: application?.employment_type || '',
         salary_range: application?.salary_range || '',
         source: application?.source || '',
-        resume_version: application?.resume_version || '',
-        cover_letter_version: application?.cover_letter_version || '',
         notes: application?.notes || '',
+        applied_at: application?.applied_at || new Date().toISOString().split('T')[0],
+        status: application?.status || 'applied',
         recruiter_name: application?.recruiter_name || '',
         recruiter_email: application?.recruiter_email || '',
         recruiter_phone: application?.recruiter_phone || '',
         recruiter_linkedin: application?.recruiter_linkedin || '',
     });
 
+    useEffect(() => {
+        if (isOpen && application) {
+            setData({
+                company_name: application.company_name || '',
+                role_title: application.role_title || '',
+                job_url: application.job_url || '',
+                location: application.location || '',
+                employment_type: application.employment_type || '',
+                salary_range: application.salary_range || '',
+                source: application.source || '',
+                notes: application.notes || '',
+                applied_at: application.applied_at || new Date().toISOString().split('T')[0],
+                status: application.status || 'applied',
+                recruiter_name: application.recruiter_name || '',
+                recruiter_email: application.recruiter_email || '',
+                recruiter_phone: application.recruiter_phone || '',
+                recruiter_linkedin: application.recruiter_linkedin || '',
+            });
+        }
+        if (!isOpen) {
+            reset();
+        }
+    }, [isOpen]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         patch(route('applications.update', application.id), {
             preserveState: true,
             onSuccess: () => {
-                setOpen(false);
+                reset();
+                onClose();
             },
         });
     };
 
+    if (!isOpen) return null;
+
     return (
         <>
-            <button
-                className="btn btn-sm btn-outline"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setOpen(true);
-                }}
-            >
-                Edit
-            </button>
-
-            {open && (
-                <dialog className="modal modal-open">
-                    <div className="modal-box">
-                        <form onSubmit={handleSubmit}>
-                            <h3 className="font-headline font-bold text-lg">Edit application details</h3>
-
-                            <div className="space-y-4 py-4">
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Company Name</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="input input-bordered"
-                                        value={data.company_name}
-                                        onChange={(e) => setData('company_name', e.target.value)}
-                                        placeholder="e.g Microsoft"
-                                    />
-                                    {errors.company_name && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.company_name}</p>
-                                    )}
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Role Title</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="input input-bordered"
-                                        value={data.role_title}
-                                        onChange={(e) => setData('role_title', e.target.value)}
-                                        placeholder="e.g Software Engineer"
-                                    />
-                                    {errors.role_title && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.role_title}</p>
-                                    )}
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Job URL</span>
-                                    </label>
-                                    <input
-                                        type="url"
-                                        className="input input-bordered"
-                                        value={data.job_url}
-                                        onChange={(e) => setData('job_url', e.target.value)}
-                                        placeholder="e.g https://linkedin.com/..."
-                                    />
-                                    {errors.job_url && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.job_url}</p>
-                                    )}
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Date Applied</span>
-                                    </label>
-                                    <input
-                                        type="date"
-                                        className="input input-bordered"
-                                        value={data.applied_at}
-                                        onChange={(e) => setData('applied_at', e.target.value)}
-                                    />
-                                </div>
-
-                                {/* Application Details Section */}
-                                <div className="divider mt-6 mb-4">
-                                    <span className="text-xs font-semibold text-gray-500 uppercase">Application Details</span>
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Location</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="input input-bordered"
-                                        value={data.location}
-                                        onChange={(e) => setData('location', e.target.value)}
-                                        placeholder="e.g Remote / New York"
-                                    />
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Employment Type</span>
-                                    </label>
-                                    <select
-                                        className="select select-bordered"
-                                        value={data.employment_type}
-                                        onChange={(e) => setData('employment_type', e.target.value)}
-                                    >
-                                        <option value="">Select type</option>
-                                        <option value="full_time">Full-time</option>
-                                        <option value="part_time">Part-time</option>
-                                        <option value="internship">Internship</option>
-                                        <option value="contract">Contract</option>
-                                        <option value="freelance">Freelance</option>
-                                    </select>
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Salary Range</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="input input-bordered"
-                                        value={data.salary_range}
-                                        onChange={(e) => setData('salary_range', e.target.value)}
-                                        placeholder="e.g $80k-$100k"
-                                    />
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Source</span>
-                                    </label>
-                                    <select
-                                        className="select select-bordered"
-                                        value={data.source}
-                                        onChange={(e) => setData('source', e.target.value)}
-                                    >
-                                        <option value="">Select source</option>
-                                        <option value="linkedin">LinkedIn</option>
-                                        <option value="company_website">Company Website</option>
-                                        <option value="job_board">Job Board</option>
-                                        <option value="referral">Referral</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Resume Version</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="input input-bordered"
-                                        value={data.resume_version}
-                                        onChange={(e) => setData('resume_version', e.target.value)}
-                                        placeholder="e.g Resume v3"
-                                    />
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Cover Letter Version</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="input input-bordered"
-                                        value={data.cover_letter_version}
-                                        onChange={(e) => setData('cover_letter_version', e.target.value)}
-                                        placeholder="e.g Cover letter v1"
-                                    />
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Notes</span>
-                                    </label>
-                                    <textarea
-                                        className="textarea textarea-bordered"
-                                        value={data.notes}
-                                        onChange={(e) => setData('notes', e.target.value)}
-                                        placeholder="Any notes..."
-                                    />
-                                </div>
-
-                                {/* Recruiter Contact Section */}
-                                <div className="divider mt-6 mb-4">
-                                    <span className="text-xs font-semibold text-gray-500 uppercase">Recruiter Contact (Optional)</span>
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Recruiter Name</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="input input-bordered"
-                                        value={data.recruiter_name}
-                                        onChange={(e) => setData('recruiter_name', e.target.value)}
-                                        placeholder="e.g John Smith"
-                                    />
-                                    {errors.recruiter_name && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.recruiter_name}</p>
-                                    )}
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Recruiter Email</span>
-                                    </label>
-                                    <input
-                                        type="email"
-                                        className="input input-bordered"
-                                        value={data.recruiter_email}
-                                        onChange={(e) => setData('recruiter_email', e.target.value)}
-                                        placeholder="e.g john@company.com"
-                                    />
-                                    {errors.recruiter_email && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.recruiter_email}</p>
-                                    )}
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Recruiter Phone</span>
-                                    </label>
-                                    <input
-                                        type="tel"
-                                        className="input input-bordered"
-                                        value={data.recruiter_phone}
-                                        onChange={(e) => setData('recruiter_phone', e.target.value)}
-                                        placeholder="e.g +1-555-0123"
-                                    />
-                                    {errors.recruiter_phone && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.recruiter_phone}</p>
-                                    )}
-                                </div>
-
-                                <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text font-label text-xs tracking-wide uppercase">Recruiter LinkedIn</span>
-                                    </label>
-                                    <input
-                                        type="url"
-                                        className="input input-bordered"
-                                        value={data.recruiter_linkedin}
-                                        onChange={(e) => setData('recruiter_linkedin', e.target.value)}
-                                        placeholder="e.g https://linkedin.com/in/johnsmith"
-                                    />
-                                    {errors.recruiter_linkedin && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.recruiter_linkedin}</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="modal-action">
-                                <button
-                                    type="button"
-                                    className="btn btn-ghost"
-                                    onClick={() => setOpen(false)}
-                                >
-                                    Cancel
-                                </button>
-                                <button type="submit" className="btn btn-primary" disabled={processing}>
-                                    {processing ? 'Saving...' : 'Save'}
-                                </button>
-                            </div>
-                        </form>
+            <div className="fixed inset-0 z-[9998] bg-black/50" onClick={onClose} />
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
+                <div className="modal-box max-w-2xl max-h-[90vh] overflow-y-auto bg-white relative shadow-2xl rounded-2xl pointer-events-auto">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold">Edit Application</h3>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="btn btn-sm btn-circle btn-ghost"
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
                     </div>
-                    <form method="dialog" className="modal-backdrop">
-                        <button onClick={() => setOpen(false)}>close</button>
+
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Company Name *</span>
+                            </label>
+                            <input
+                                type="text"
+                                value={data.company_name}
+                                onChange={(e) => setData('company_name', e.target.value)}
+                                className="input input-bordered w-full"
+                                required
+                            />
+                            {errors.company_name && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">{errors.company_name}</span>
+                                </label>
+                            )}
+                        </div>
+
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Role Title *</span>
+                            </label>
+                            <input
+                                type="text"
+                                value={data.role_title}
+                                onChange={(e) => setData('role_title', e.target.value)}
+                                className="input input-bordered w-full"
+                                required
+                            />
+                            {errors.role_title && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">{errors.role_title}</span>
+                                </label>
+                            )}
+                        </div>
+
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Job URL</span>
+                            </label>
+                            <input
+                                type="url"
+                                value={data.job_url}
+                                onChange={(e) => setData('job_url', e.target.value)}
+                                className="input input-bordered w-full"
+                            />
+                            {errors.job_url && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">{errors.job_url}</span>
+                                </label>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Location</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.location}
+                                    onChange={(e) => setData('location', e.target.value)}
+                                    className="input input-bordered w-full"
+                                />
+                                {errors.location && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{errors.location}</span>
+                                    </label>
+                                )}
+                            </div>
+
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Employment Type</span>
+                                </label>
+                                <select
+                                    value={data.employment_type}
+                                    onChange={(e) => setData('employment_type', e.target.value)}
+                                    className="select select-bordered w-full"
+                                >
+                                    <option value="">Select type</option>
+                                    <option value="full_time">Full Time</option>
+                                    <option value="part_time">Part Time</option>
+                                    <option value="internship">Internship</option>
+                                    <option value="contract">Contract</option>
+                                    <option value="freelance">Freelance</option>
+                                </select>
+                                {errors.employment_type && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{errors.employment_type}</span>
+                                    </label>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Salary Range</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.salary_range}
+                                    onChange={(e) => setData('salary_range', e.target.value)}
+                                    placeholder="$80k-$100k"
+                                    className="input input-bordered w-full"
+                                />
+                                {errors.salary_range && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{errors.salary_range}</span>
+                                    </label>
+                                )}
+                            </div>
+
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Source</span>
+                                </label>
+                                <select
+                                    value={data.source}
+                                    onChange={(e) => setData('source', e.target.value)}
+                                    className="select select-bordered w-full"
+                                >
+                                    <option value="">Select source</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                    <option value="company_website">Company Website</option>
+                                    <option value="job_board">Job Board</option>
+                                    <option value="referral">Referral</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                {errors.source && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{errors.source}</span>
+                                    </label>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Application Date *</span>
+                            </label>
+                            <input
+                                type="date"
+                                value={data.applied_at}
+                                onChange={(e) => setData('applied_at', e.target.value)}
+                                className="input input-bordered w-full"
+                                required
+                            />
+                            {errors.applied_at && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">{errors.applied_at}</span>
+                                </label>
+                            )}
+                        </div>
+
+                        <div className="divider">Recruiter Contact (Optional)</div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Recruiter Name</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.recruiter_name}
+                                    onChange={(e) => setData('recruiter_name', e.target.value)}
+                                    className="input input-bordered w-full"
+                                />
+                                {errors.recruiter_name && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{errors.recruiter_name}</span>
+                                    </label>
+                                )}
+                            </div>
+
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Recruiter Email</span>
+                                </label>
+                                <input
+                                    type="email"
+                                    value={data.recruiter_email}
+                                    onChange={(e) => setData('recruiter_email', e.target.value)}
+                                    className="input input-bordered w-full"
+                                />
+                                {errors.recruiter_email && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{errors.recruiter_email}</span>
+                                    </label>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Recruiter Phone</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.recruiter_phone}
+                                    onChange={(e) => setData('recruiter_phone', e.target.value)}
+                                    className="input input-bordered w-full"
+                                />
+                                {errors.recruiter_phone && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{errors.recruiter_phone}</span>
+                                    </label>
+                                )}
+                            </div>
+
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Recruiter LinkedIn</span>
+                                </label>
+                                <input
+                                    type="url"
+                                    value={data.recruiter_linkedin}
+                                    onChange={(e) => setData('recruiter_linkedin', e.target.value)}
+                                    className="input input-bordered w-full"
+                                />
+                                {errors.recruiter_linkedin && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{errors.recruiter_linkedin}</span>
+                                    </label>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Notes</span>
+                            </label>
+                            <textarea
+                                value={data.notes}
+                                onChange={(e) => setData('notes', e.target.value)}
+                                className="textarea textarea-bordered w-full"
+                                rows="3"
+                            />
+                            {errors.notes && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">{errors.notes}</span>
+                                </label>
+                            )}
+                        </div>
+
+                        <div className="modal-action">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="btn btn-ghost"
+                                disabled={processing}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                disabled={processing}
+                            >
+                                {processing ? 'Saving...' : 'Save Changes'}
+                            </button>
+                        </div>
                     </form>
-                </dialog>
-            )}
+                </div>
+            </div>
         </>
     );
 }
