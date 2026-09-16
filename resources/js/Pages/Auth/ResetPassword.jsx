@@ -32,7 +32,7 @@ export default function ResetPassword({ token, email }) {
                         onChange={(e) => setData('email', e.target.value)}
                         autoFocus
                     />
-                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                    {errors.email && <p className="text-error text-xs mt-1">{errors.email}</p>}
                 </div>
 
                 <div className="form-control">
@@ -46,7 +46,7 @@ export default function ResetPassword({ token, email }) {
                         onChange={(e) => setData('password', e.target.value)}
                         autoComplete="new-password"
                     />
-                    {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+                    {errors.password && <p className="text-error text-xs mt-1">{errors.password}</p>}
                 </div>
 
                 <div className="form-control">
@@ -61,7 +61,7 @@ export default function ResetPassword({ token, email }) {
                         autoComplete="new-password"
                     />
                     {errors.password_confirmation && (
-                        <p className="text-red-500 text-xs mt-1">{errors.password_confirmation}</p>
+                        <p className="text-error text-xs mt-1">{errors.password_confirmation}</p>
                     )}
                 </div>
 

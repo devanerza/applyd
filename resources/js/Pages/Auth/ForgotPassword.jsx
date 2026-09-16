@@ -37,7 +37,7 @@ export default function ForgotPassword({ status }) {
                         onChange={(e) => setData('email', e.target.value)}
                         autoFocus
                     />
-                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                    {errors.email && <p className="text-error text-xs mt-1">{errors.email}</p>}
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
