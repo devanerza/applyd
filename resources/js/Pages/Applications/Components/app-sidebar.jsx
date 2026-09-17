@@ -28,7 +28,7 @@ export function AppSidebar() {
 
     return (
         <>
-        <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col border-r border-neutral bg-base-100 px-4 py-6 overflow-hidden">
+        <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col border-r border-neutral-800 bg-base-100/10 px-4 py-6 overflow-hidden">
             <div className="mb-8 flex items-center gap-2 px-2">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
                     <Briefcase className="h-5 w-5 text-primary-content" />
@@ -46,7 +46,7 @@ export function AppSidebar() {
             <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="mb-6 flex items-center justify-center gap-2 rounded-full bg-primary py-3 font-headline text-sm font-semibold text-primary-content hover:bg-primary/80 transition-colors w-full"
+                className="mb-6 flex items-center justify-center gap-2 rounded-2xl bg-primary py-3 font-headline text-sm font-semibold text-primary-content hover:bg-primary/80 transition-colors w-full"
             >
                 <Plus className="h-4 w-4" />
                 Add Application
@@ -59,7 +59,7 @@ export function AppSidebar() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex items-center gap-3 rounded-full px-4 py-3 font-body text-sm transition-colors ${
+                            className={`flex items-center gap-3 rounded-2xl px-4 py-3 font-body text-sm transition-colors ${
                                 active
                                     ? 'bg-secondary text-secondary-content font-semibold'
                                     : 'text-base-content/60 hover:bg-secondary/30'
