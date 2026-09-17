@@ -32,9 +32,9 @@ export default function Dashboard({ summary, needsAttention }) {
             value: summary?.active ?? 0,
             icon: CheckCircle2,
             bg: 'bg-primary',
-            iconBg: 'bg-primary-content',
-            iconColor: 'text-primary',
-            labelColor: 'text-primary-content/70',
+            iconBg: 'bg-primary-content/20',
+            iconColor: 'text-primary-content',
+            labelColor: 'text-primary-content',
             valueColor: 'text-primary-content',
         },
         {
@@ -42,9 +42,9 @@ export default function Dashboard({ summary, needsAttention }) {
             value: summary?.waiting ?? 0,
             icon: MessageCircle,
             bg: 'bg-secondary',
-            iconBg: 'bg-secondary-content',
-            iconColor: 'text-secondary',
-            labelColor: 'text-secondary-content/70',
+            iconBg: 'bg-secondary-content/20',
+            iconColor: 'text-secondary-content',
+            labelColor: 'text-secondary-content',
             valueColor: 'text-secondary-content',
         },
         {
@@ -52,10 +52,10 @@ export default function Dashboard({ summary, needsAttention }) {
             value: summary?.ghosted ?? 0,
             icon: AlertTriangle,
             bg: 'bg-accent',
-            iconBg: 'bg-white',
-            iconColor: 'text-accent',
-            labelColor: 'text-white/80',
-            valueColor: 'text-white',
+            iconBg: 'bg-accent-content/20',
+            iconColor: 'text-accent-content',
+            labelColor: 'text-accent-content',
+            valueColor: 'text-accent-content',
         },
     ];
 
@@ -111,7 +111,7 @@ export default function Dashboard({ summary, needsAttention }) {
                                 <div className="flex items-center gap-2 text-lg font-bold text-base-content">
                                     <AlertTriangle className="h-5 w-5 text-warning" />
                                     Needs attention
-                                    <span className="ml-1 text-sm font-normal text-base-content/50">({visible.length})</span>
+                                    <span className="ml-1 text-sm font-normal text-base-content/70">({visible.length})</span>
                                 </div>
                                 <Link
                                     href={route('applications.index')}
@@ -136,17 +136,16 @@ export default function Dashboard({ summary, needsAttention }) {
                                     <table className="table w-full">
                                         <thead>
                                             <tr className="border-b border-base-300">
-                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                                     Role / Company
                                                 </th>
-                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                                     Status
                                                 </th>
-                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                                     Last Activity
                                                 </th>
-                                                <th className="font-body text-right text-xs font-semibold uppercase tracking-wide text-base-content/50">
-                                                   
+                                                <th className="font-body text-right text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                                 </th>
                                             </tr>
                                         </thead>
@@ -155,7 +154,7 @@ export default function Dashboard({ summary, needsAttention }) {
                                                 <tr key={app.id} className="border-b border-base-300/50 hover:bg-base-300/30 transition-colors">
                                                     <td className="py-3">
                                                         <p className="font-headline text-sm font-bold text-base-content">{app.role_title}</p>
-                                                        <p className="font-label text-xs tracking-wide uppercase text-base-content/50">{app.company_name}</p>
+                                                        <p className="font-label text-xs tracking-wide uppercase text-base-content/70">{app.company_name}</p>
                                                     </td>
                                                     <td className="py-3">
                                                         <StatusDropdown
@@ -165,7 +164,7 @@ export default function Dashboard({ summary, needsAttention }) {
                                                         />
                                                     </td>
                                                     <td className="py-3">
-                                                        <span className="text-sm text-base-content/60">
+                                                        <span className="text-sm text-base-content/70">
                                                             {app.last_activity_at
                                                                 ? new Date(app.last_activity_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                                                                 : '—'}
@@ -184,14 +183,14 @@ export default function Dashboard({ summary, needsAttention }) {
                                                                 <button
                                                                     disabled
                                                                     title="Add recruiter contact to enable follow-ups"
-                                                                    className="inline-flex items-center gap-1.5 rounded-full bg-base-300 px-3 py-1.5 text-xs font-semibold text-base-content/40 cursor-not-allowed opacity-50"
+                                                                    className="inline-flex items-center gap-1.5 rounded-full bg-base-300 px-3 py-1.5 text-xs font-semibold text-base-content/60 cursor-not-allowed opacity-50"
                                                                 >
                                                                     Follow up
                                                                 </button>
                                                             )}
                                                             <button
                                                                 onClick={() => handleIgnore(app.id)}
-                                                                className="inline-flex items-center gap-1.5 rounded-full bg-base-300/50 px-3 py-1.5 text-xs font-semibold text-base-content/50 hover:bg-base-300 transition-colors"
+                                                                className="inline-flex items-center gap-1.5 rounded-full bg-base-300/50 px-3 py-1.5 text-xs font-semibold text-base-content/70 hover:bg-base-300 transition-colors"
                                                             >
                                                                 Ignore
                                                             </button>
@@ -215,14 +214,14 @@ export default function Dashboard({ summary, needsAttention }) {
                             </div>
 
                             <div className="mt-4 rounded-2xl bg-secondary/20 p-5">
-                                <span className="font-label rounded-full bg-secondary/30 px-2 py-1 text-[10px] text-secondary font-bold tracking-wide uppercase">
+                                <span className="font-label rounded-full bg-secondary/30 px-2 py-1 text-[10px] text-secondary-content font-bold tracking-wide uppercase">
                                     INTERVIEW
                                 </span>
 
                                 <p className="font-headline mt-3 font-bold text-base-content">
                                     No upcoming interviews
                                 </p>
-                                <p className="text-sm text-base-content/50">
+                                <p className="text-sm text-base-content/70">
                                     Add interviews to see them here.
                                 </p>
                             </div>

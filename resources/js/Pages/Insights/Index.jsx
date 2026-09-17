@@ -46,11 +46,11 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <div className="rounded-3xl bg-primary p-6">
                         <div className="flex items-center gap-4">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-content">
-                                <Target className="h-6 w-6 text-primary" />
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-content/20">
+                                <Target className="h-6 w-6 text-primary-content" />
                             </div>
                             <div>
-                                <p className="font-body text-sm text-primary-content/70">
+                                <p className="font-body text-sm text-primary-content">
                                     Response Rate
                                 </p>
                                 <p className="font-headline text-3xl font-bold text-primary-content">
@@ -62,11 +62,11 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
 
                     <div className="rounded-3xl bg-secondary p-6">
                         <div className="flex items-center gap-4">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary-content">
-                                <Award className="h-6 w-6 text-secondary" />
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary-content/20">
+                                <Award className="h-6 w-6 text-secondary-content" />
                             </div>
                             <div>
-                                <p className="font-body text-sm text-secondary-content/70">
+                                <p className="font-body text-sm text-secondary-content">
                                     Interview Conversion
                                 </p>
                                 <p className="font-headline text-3xl font-bold text-secondary-content">
@@ -78,14 +78,14 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
 
                     <div className="rounded-3xl bg-accent p-6">
                         <div className="flex items-center gap-4">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white">
-                                <Briefcase className="h-6 w-6 text-accent" />
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-content/20">
+                                <Briefcase className="h-6 w-6 text-accent-content" />
                             </div>
                             <div>
-                                <p className="font-body text-sm text-white/80">
+                                <p className="font-body text-sm text-accent-content">
                                     Total Applications
                                 </p>
-                                <p className="font-headline text-3xl font-bold text-white">
+                                <p className="font-headline text-3xl font-bold text-accent-content">
                                     {totalApplications}
                                 </p>
                             </div>
@@ -105,7 +105,7 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
                         <div className="rounded-3xl bg-base-200 p-6 border border-base-300">
                             {totalApplications === 0 ? (
                                 <div className="py-8 text-center">
-                                    <p className="text-base-content/60">No application data yet</p>
+                                    <p className="text-base-content/70">No application data yet</p>
                                 </div>
                             ) : (
                                 <div className="space-y-4">
@@ -154,23 +154,23 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
                         <div className="rounded-3xl bg-base-200 p-6 border border-base-300">
                             {sortedSources.length === 0 || sortedSources.every(([, data]) => data.total === 0) ? (
                                 <div className="py-8 text-center">
-                                    <p className="text-base-content/60">No source data yet</p>
+                                    <p className="text-base-content/70">No source data yet</p>
                                 </div>
                             ) : (
                                 <div className="overflow-x-auto">
                                     <table className="table w-full">
                                         <thead>
                                             <tr className="border-b border-base-300">
-                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/60">
+                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                                     Source
                                                 </th>
-                                                <th className="font-body text-center text-xs font-semibold uppercase tracking-wide text-base-content/60">
+                                                <th className="font-body text-center text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                                     Applications
                                                 </th>
-                                                <th className="font-body text-center text-xs font-semibold uppercase tracking-wide text-base-content/60">
+                                                <th className="font-body text-center text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                                     Interviews
                                                 </th>
-                                                <th className="font-body text-right text-xs font-semibold uppercase tracking-wide text-base-content/60">
+                                                <th className="font-body text-right text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                                     Rate
                                                 </th>
                                             </tr>
@@ -191,14 +191,14 @@ export default function InsightsIndex({ funnel, responseRate, interviewConversio
                                                         <div className="flex items-center justify-end gap-2">
                                                             <span className={`font-body text-sm font-semibold ${data.rate >= 50 ? 'text-success' :
                                                                     data.rate >= 25 ? 'text-warning' :
-                                                                        'text-base-content/50'
+                                                                        'text-base-content/70'
                                                                 }`}>
                                                                 {data.rate}%
                                                             </span>
                                                             {data.rate >= 25 ? (
                                                                 <TrendingUp className="h-4 w-4 text-success" />
                                                             ) : (
-                                                                <TrendingDown className="h-4 w-4 text-base-content/40" />
+                                                                <TrendingDown className="h-4 w-4 text-base-content/70" />
                                                             )}
                                                         </div>
                                                     </td>
