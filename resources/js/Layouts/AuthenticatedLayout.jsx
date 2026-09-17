@@ -8,7 +8,7 @@ export default function AuthenticatedLayout({ header, children }) {
     return (
         <div className="min-h-screen bg-base-100">
             <AppSidebar />
-            <div className="ml-64 min-h-screen" style={{ background: 'linear-gradient(165deg, color-mix(in srgb, var(--p) 15%, var(--b1)) 0%, var(--b1) 50%, color-mix(in srgb, var(--p) 8%, var(--b1)) 100%)' }}>
+            <div className="ml-64 min-h-screen bg-base-100" style={{ backgroundImage: 'radial-gradient(ellipse at 10% 0%, color-mix(in srgb, var(--p) 20%, transparent) 0%, transparent 60%)' }}>
                 {children}
             </div>
         </div>
