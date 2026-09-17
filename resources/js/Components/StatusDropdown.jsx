@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { router } from '@inertiajs/react';
 import { ChevronDown, Check } from 'lucide-react';
 
@@ -15,19 +16,33 @@ const STATUSES = [
 export default function StatusDropdown({ applicationId, currentStatus, className = '', size = 'md' }) {
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(currentStatus);
+    const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
+    const triggerRef = useRef(null);
     const dropdownRef = useRef(null);
 
     const current = STATUSES.find(s => s.value === status) || STATUSES[0];
 
     useEffect(() => {
         const handle = (e) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target) &&
+                triggerRef.current && !triggerRef.current.contains(e.target)) {
                 setOpen(false);
             }
         };
         document.addEventListener('mousedown', handle);
         return () => document.removeEventListener('mousedown', handle);
     }, []);
+
+    const handleOpen = () => {
+        if (!open && triggerRef.current) {
+            const rect = triggerRef.current.getBoundingClientRect();
+            setMenuPos({
+                top: rect.bottom + 4,
+                left: rect.right - 160,
+            });
+        }
+        setOpen(!open);
+    };
 
     const handleChange = (newStatus) => {
         setStatus(newStatus);
@@ -44,13 +59,14 @@ export default function StatusDropdown({ applicationId, currentStatus, className
     };
 
     return (
-        <div className="relative inline-block" ref={dropdownRef}>
+        <>
             <button
+                ref={triggerRef}
                 type="button"
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setOpen(!open);
+                    handleOpen();
                 }}
                 className={`flex items-center gap-1 rounded-full font-medium capitalize ${current.color} ${sizeClasses[size]} ${className}`}
             >
@@ -58,8 +74,12 @@ export default function StatusDropdown({ applicationId, currentStatus, className
                 <ChevronDown className="h-3 w-3" />
             </button>
 
-            {open && (
-                <div className="absolute right-0 z-50 mt-1 w-40 rounded-2xl border border-base-300 bg-base-200 py-2 shadow-lg">
+            {open && createPortal(
+                <div
+                    ref={dropdownRef}
+                    className="fixed z-[9999] w-40 rounded-2xl border border-base-300 bg-base-200 py-2 shadow-lg"
+                    style={{ top: menuPos.top, left: menuPos.left }}
+                >
                     {STATUSES.map((s) => (
                         <button
                             key={s.value}
@@ -75,8 +95,9 @@ export default function StatusDropdown({ applicationId, currentStatus, className
                             {s.value === status && <Check className="h-4 w-4 text-primary" />}
                         </button>
                     ))}
-                </div>
+                </div>,
+                document.body
             )}
-        </div>
+        </>
     );
 }
