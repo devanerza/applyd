@@ -8,6 +8,7 @@ import {
     AlertTriangle,
     Building2,
     CalendarClock,
+    ArrowRight,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -105,104 +106,126 @@ export default function Dashboard({ summary, needsAttention }) {
                 <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Needs attention */}
                     <div className="lg:col-span-2">
-                        <div className="mb-4 flex items-center justify-between">
-                            <h2 className="font-headline flex items-center gap-2 text-lg font-bold text-base-content">
-                                <AlertTriangle className="h-4 w-4 text-primary" />
-                                Needs attention
-                            </h2>
-                            <Link
-                                href={route('applications.index')}
-                                className="text-sm font-medium text-primary hover:underline"
-                            >
-                                View all
-                            </Link>
-                        </div>
+                        <div className="rounded-3xl border border-base-300 bg-base-200 p-6">
+                            <div className="mb-4 flex items-center justify-between">
+                                <div className="flex items-center gap-2 text-lg font-bold text-base-content">
+                                    <AlertTriangle className="h-5 w-5 text-warning" />
+                                    Needs attention
+                                    <span className="ml-1 text-sm font-normal text-base-content/50">({visible.length})</span>
+                                </div>
+                                <Link
+                                    href={route('applications.index')}
+                                    className="text-sm font-medium text-primary hover:underline"
+                                >
+                                    View all
+                                </Link>
+                            </div>
 
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             {visible.length === 0 ? (
-                                <div className="col-span-2 rounded-3xl border-2 border-dashed border-base-300 p-8 text-center">
+                                <div className="rounded-3xl border-2 border-dashed border-base-300 p-8 text-center">
                                     <p className="mb-2 text-lg font-bold text-base-content/80">No applications need attention</p>
                                     <Link
                                         href={route('applications.create')}
-                                        className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90"
+                                        className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-content hover:bg-primary/90"
                                     >
                                         Create application
                                     </Link>
                                 </div>
                             ) : (
-                                visible.map((app) => (
-                                    <div
-                                        key={app.id}
-                                        className="rounded-3xl bg-accent p-5"
-                                    >
-                                        <div className="flex items-start justify-between">
-                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-base-200">
-                                                <Building2 className="h-5 w-5 text-primary" />
-                                            </div>
-                                            <StatusDropdown 
-                                                applicationId={app.id}
-                                                currentStatus={app.status}
-                                                size="sm"
-                                            />
-                                        </div>
-
-                                        <p className="font-headline mt-4 font-bold text-accent-content">
-                                            {app.role_title}
-                                        </p>
-                                        <p className="text-sm text-accent-content/80">
-                                            {app.company_name}
-                                        </p>
-
-                                        <div className="mt-4 flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                {(app.recruiter_name || app.recruiter_email) ? (
-                                                    <Link
-                                                        href={route('applications.show', app.id)}
-                                                        className="font-body rounded-full px-4 py-2 text-xs font-semibold bg-primary text-primary-content hover:bg-primary/80 transition-colors"
-                                                    >
-                                                        Follow up
-                                                    </Link>
-                                                ) : (
-                                                    <button
-                                                        disabled
-                                                        title="Add recruiter contact to enable follow-ups"
-                                                        className="font-body rounded-full px-4 py-2 text-xs font-semibold bg-base-300 text-base-content/50 cursor-not-allowed opacity-50"
-                                                    >
-                                                        Follow up
-                                                    </button>
-                                                )}
-                                                <button
-                                                    onClick={() => handleIgnore(app.id)}
-                                                    className="font-body rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors"
-                                                >
-                                                    Ignore
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))
+                                <div className="overflow-x-auto">
+                                    <table className="table w-full">
+                                        <thead>
+                                            <tr className="border-b border-base-300">
+                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                    Role / Company
+                                                </th>
+                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                    Status
+                                                </th>
+                                                <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                    Last Activity
+                                                </th>
+                                                <th className="font-body text-right text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                   
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {visible.map((app) => (
+                                                <tr key={app.id} className="border-b border-base-300/50 hover:bg-base-300/30 transition-colors">
+                                                    <td className="py-3">
+                                                        <p className="font-headline text-sm font-bold text-base-content">{app.role_title}</p>
+                                                        <p className="font-label text-xs tracking-wide uppercase text-base-content/50">{app.company_name}</p>
+                                                    </td>
+                                                    <td className="py-3">
+                                                        <StatusDropdown
+                                                            applicationId={app.id}
+                                                            currentStatus={app.status}
+                                                            size="sm"
+                                                        />
+                                                    </td>
+                                                    <td className="py-3">
+                                                        <span className="text-sm text-base-content/60">
+                                                            {app.last_activity_at
+                                                                ? new Date(app.last_activity_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                                                                : '—'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-3 text-right">
+                                                        <div className="flex items-center justify-end gap-2">
+                                                            {(app.recruiter_name || app.recruiter_email) ? (
+                                                                <Link
+                                                                    href={route('applications.show', app.id)}
+                                                                    className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors"
+                                                                >
+                                                                    Follow up
+                                                                </Link>
+                                                            ) : (
+                                                                <button
+                                                                    disabled
+                                                                    title="Add recruiter contact to enable follow-ups"
+                                                                    className="inline-flex items-center gap-1.5 rounded-full bg-base-300 px-3 py-1.5 text-xs font-semibold text-base-content/40 cursor-not-allowed opacity-50"
+                                                                >
+                                                                    Follow up
+                                                                </button>
+                                                            )}
+                                                            <button
+                                                                onClick={() => handleIgnore(app.id)}
+                                                                className="inline-flex items-center gap-1.5 rounded-full bg-base-300/50 px-3 py-1.5 text-xs font-semibold text-base-content/50 hover:bg-base-300 transition-colors"
+                                                            >
+                                                                Ignore
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             )}
                         </div>
                     </div>
 
                     {/* Upcoming — placeholder until Interview model exists */}
                     <div>
-                        <h2 className="font-headline mb-4 flex items-center gap-2 text-lg font-bold text-base-content">
-                            <CalendarClock className="h-4 w-4 text-primary" />
-                            Upcoming
-                        </h2>
+                        <div className="rounded-3xl border border-base-300 bg-base-200 p-6">
+                            <div className="flex items-center gap-2 text-lg font-bold text-base-content">
+                                <CalendarClock className="h-5 w-5 text-primary" />
+                                Upcoming
+                            </div>
 
-                        <div className="rounded-3xl bg-secondary p-5 text-secondary-content">
-                            <span className="font-label rounded-full bg-secondary-content/20 px-2 py-1 text-[10px] text-secondary-content font-bold tracking-wide uppercase">
-                                INTERVIEW
-                            </span>
+                            <div className="mt-4 rounded-2xl bg-secondary/20 p-5">
+                                <span className="font-label rounded-full bg-secondary/30 px-2 py-1 text-[10px] text-secondary font-bold tracking-wide uppercase">
+                                    INTERVIEW
+                                </span>
 
-                            <p className="font-headline mt-3 font-bold">
-                                No upcoming interviews
-                            </p>
-                            <p className="text-sm text-secondary-content/70">
-                                Add interviews to see them here.
-                            </p>
+                                <p className="font-headline mt-3 font-bold text-base-content">
+                                    No upcoming interviews
+                                </p>
+                                <p className="text-sm text-base-content/50">
+                                    Add interviews to see them here.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -5,11 +5,9 @@ import FilterDropdown from '@/Components/FilterDropdown';
 import PageHeader from '@/Components/PageHeader';
 import {
     SlidersHorizontal,
-    CheckCircle2,
-    AlertTriangle,
-    Ban,
+    Briefcase,
+    ExternalLink,
     ArrowRight,
-    Building2,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -65,55 +63,13 @@ export default function ApplicationsIndex({ applications, filters }) {
         { value: 'other', label: 'Other' },
     ];
 
-    const healthStyles = {
-        needs_attention: {
-            card: 'bg-warning/20',
-            iconWrap: 'bg-warning',
-            iconColor: 'text-warning-content',
-            badge: 'bg-neutral/10 text-neutral-content',
-            title: 'text-neutral-content',
-            subtitle: 'text-neutral-content/70',
-            label: 'text-warning',
-            labelIcon: AlertTriangle,
-            labelText: 'Needs Attention',
-            action: 'bg-warning hover:bg-warning/80 text-warning-content',
-        },
-        healthy: {
-            card: 'bg-secondary/20',
-            iconWrap: 'bg-success',
-            iconColor: 'text-success-content',
-            badge: 'bg-neutral/10 text-neutral-content',
-            title: 'text-neutral-content',
-            subtitle: 'text-neutral-content/70',
-            label: 'text-success',
-            labelIcon: CheckCircle2,
-            labelText: 'Healthy',
-            action: 'bg-success hover:bg-success/80 text-success-content',
-        },
-        stale: {
-            card: 'bg-error/10',
-            iconWrap: 'bg-error/50',
-            iconColor: 'text-error-content',
-            badge: 'bg-neutral/10 text-neutral-content',
-            title: 'text-neutral-content',
-            subtitle: 'text-neutral-content/70',
-            label: 'text-error/70',
-            labelIcon: AlertTriangle,
-            labelText: 'Stale',
-            action: 'bg-error/50 hover:bg-error/60 text-error-content',
-        },
-        ghosted: {
-            card: 'bg-error/20',
-            iconWrap: 'bg-error',
-            iconColor: 'text-error-content',
-            badge: 'bg-neutral/10 text-neutral-content',
-            title: 'text-neutral-content',
-            subtitle: 'text-neutral-content/70',
-            label: 'text-error',
-            labelIcon: Ban,
-            labelText: 'Likely Ghosted',
-            action: 'bg-error hover:bg-error/80 text-error-content',
-        },
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '—';
+        return new Date(dateStr).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+        });
     };
 
     return (
@@ -160,81 +116,90 @@ export default function ApplicationsIndex({ applications, filters }) {
                         </button>
                     </div>
 
-                    {items.length === 0 ? (
-                        <div className="mt-6 rounded-3xl border-2 border-dashed border-base-300 p-12 text-center">
-                            <Building2 className="mx-auto mb-4 h-12 w-12 text-base-content/30" />
-                            <p className="mb-2 text-lg font-bold text-base-content/80">No applications found</p>
-                            <Link
-                                href={route('applications.create')}
-                                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-content hover:bg-primary/90"
-                            >
-                                Create application
-                            </Link>
+                    {/* Table card */}
+                    <div className="mt-6 rounded-3xl border border-base-300 bg-base-200 p-6">
+                        <div className="mb-4 flex items-center gap-2 text-lg font-bold text-base-content">
+                            <Briefcase className="h-5 w-5 text-primary" />
+                            All Applications
+                            <span className="ml-1 text-sm font-normal text-base-content/50">({items.length})</span>
                         </div>
-                    ) : (
-                        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {items.map((app) => {
-                                const health = app.health || 'healthy';
-                                const style = healthStyles[health];
-                                const LabelIcon = style.labelIcon;
 
-                                return (
-                                    <div
-                                        key={app.id}
-                                        className={`rounded-2xl ${style.card} p-5 relative`}
-                                    >
-                                        <div className="flex items-start justify-between">
-                                            <div
-                                                className={`flex h-10 w-10 items-center justify-center rounded-full ${style.iconWrap}`}
-                                            >
-                                                <Building2
-                                                    className={`h-5 w-5 ${style.iconColor}`}
-                                                />
-                                            </div>
-                                            <StatusDropdown
-                                                applicationId={app.id}
-                                                currentStatus={app.status}
-                                                size="md"
-                                            />
-                                        </div>
-
-                                        <p
-                                            className={`mt-4 truncate font-bold ${style.title}`}
-                                            title={app.role_title}
-                                        >
-                                            {app.role_title}
-                                        </p>
-                                        <p
-                                            className={`text-sm ${style.subtitle}`}
-                                        >
-                                            {app.company_name}
-                                        </p>
-
-                                        <div className="mt-4 flex items-center justify-between">
-                                            <span
-                                                className={`flex items-center gap-1 text-xs font-medium ${style.label}`}
-                                            >
-                                                <LabelIcon className="h-3.5 w-3.5" />
-                                                {style.labelText}
-                                            </span>
-                                            <Link
-                                                href={route(
-                                                    'applications.show',
-                                                    app.id
-                                                )}
-                                                className={`flex h-9 w-9 items-center justify-center rounded-full text-white ${style.action}`}
-                                            >
-                                                <ArrowRight className="h-4 w-4" />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
+                        {items.length === 0 ? (
+                            <div className="rounded-3xl border-2 border-dashed border-base-300 p-12 text-center">
+                                <Building2 className="mx-auto mb-4 h-12 w-12 text-base-content/30" />
+                                <p className="mb-2 text-lg font-bold text-base-content/80">No applications found</p>
+                                <Link
+                                    href={route('applications.create')}
+                                    className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-content hover:bg-primary/90"
+                                >
+                                    Create application
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="table w-full">
+                                    <thead>
+                                        <tr className="border-b border-base-300">
+                                            <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                Role / Company
+                                            </th>
+                                            <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                Status
+                                            </th>
+                                            <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                Source
+                                            </th>
+                                            <th className="font-body text-left text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                                Applied
+                                            </th>
+                                            <th className="font-body text-right text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                               
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {items.map((app) => (
+                                            <tr key={app.id} className="border-b border-base-300/50 hover:bg-base-300/30 transition-colors">
+                                                <td className="py-3">
+                                                    <p className="font-headline text-sm font-bold text-base-content">{app.role_title}</p>
+                                                    <p className="font-label text-xs tracking-wide uppercase text-base-content/50">{app.company_name}</p>
+                                                </td>
+                                                <td className="py-3">
+                                                    <StatusDropdown
+                                                        applicationId={app.id}
+                                                        currentStatus={app.status}
+                                                        size="sm"
+                                                    />
+                                                </td>
+                                                <td className="py-3">
+                                                    <span className="text-sm text-base-content/60 capitalize">
+                                                        {app.source ? app.source.replace('_', ' ') : '—'}
+                                                    </span>
+                                                </td>
+                                                <td className="py-3">
+                                                    <span className="text-sm text-base-content/60">
+                                                        {formatDate(app.applied_at)}
+                                                    </span>
+                                                </td>
+                                                <td className="py-3 text-right">
+                                                    <Link
+                                                        href={route('applications.show', app.id)}
+                                                        className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors"
+                                                    >
+                                                        View
+                                                        <ArrowRight className="h-3 w-3" />
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
 
                     {!Array.isArray(applications) && applications.links && (
-                        <div className="mt-8 flex flex-wrap items-center gap-2">
+                        <div className="mt-6 flex flex-wrap items-center gap-2">
                             {applications.links.map((link, index) => (
                                 <Link
                                     key={`page-${index}`}
