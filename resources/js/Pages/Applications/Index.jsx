@@ -76,7 +76,8 @@ export default function ApplicationsIndex({ applications, filters }) {
         <>
             <Head title="Applications" />
 
-            <div className="flex min-h-screen bg-base-100" style={{ backgroundImage: 'radial-gradient(ellipse at 10% 0%, color-mix(in srgb, var(--p) 20%, transparent) 0%, transparent 60%)' }}>
+            <div className="flex min-h-screen bg-base-100 relative">
+                <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: 'radial-gradient(ellipse at 10% 0%, rgba(84, 37, 212, 0.25) 0%, transparent 60%)' }} />
                 <AppSidebar />
 
                 <main className="ml-64 flex-1 px-10 py-8">
