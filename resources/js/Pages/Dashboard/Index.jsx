@@ -8,11 +8,13 @@ import {
     AlertTriangle,
     Building2,
     CalendarClock,
+    Calendar,
+    Clock,
     ArrowRight,
 } from 'lucide-react';
 import { useState } from 'react';
 
-export default function Dashboard({ summary, needsAttention }) {
+export default function Dashboard({ summary, needsAttention, upcomingInterviews = [] }) {
     const user = usePage().props.auth.user;
 
     const [search, setSearch] = useState('');
@@ -205,7 +207,7 @@ export default function Dashboard({ summary, needsAttention }) {
                         </div>
                     </div>
 
-                    {/* Upcoming — placeholder until Interview model exists */}
+                    {/* Upcoming Interviews */}
                     <div>
                         <div className="rounded-3xl border border-base-300 bg-base-200 p-6">
                             <div className="flex items-center gap-2 text-lg font-bold text-base-content">
@@ -213,18 +215,52 @@ export default function Dashboard({ summary, needsAttention }) {
                                 Upcoming
                             </div>
 
-                            <div className="mt-4 rounded-2xl bg-secondary/20 p-5">
-                                <span className="font-label rounded-full bg-secondary/30 px-2 py-1 text-[10px] text-secondary-content font-bold tracking-wide uppercase">
-                                    INTERVIEW
-                                </span>
-
-                                <p className="font-headline mt-3 font-bold text-base-content">
-                                    No upcoming interviews
-                                </p>
-                                <p className="text-sm text-base-content/70">
-                                    Add interviews to see them here.
-                                </p>
-                            </div>
+                            {upcomingInterviews.length > 0 ? (
+                                <div className="mt-4 space-y-3">
+                                    {upcomingInterviews.map((interview) => (
+                                        <Link
+                                            key={interview.id}
+                                            href={route('applications.show', interview.application_id)}
+                                            className="block rounded-2xl bg-primary/5 border border-primary/10 p-4 hover:bg-primary/10 transition-colors"
+                                        >
+                                            <span className="font-label rounded-full bg-primary/20 px-2 py-0.5 text-[10px] text-primary font-bold tracking-wide uppercase">
+                                                {interview.type.replace('_', ' ')}
+                                            </span>
+                                            <p className="font-headline mt-2 font-bold text-base-content text-sm">
+                                                {interview.application?.company_name}
+                                            </p>
+                                            <p className="text-xs text-base-content/70">
+                                                {interview.application?.role_title}
+                                            </p>
+                                            <div className="mt-2 flex items-center gap-3 text-xs text-base-content/60">
+                                                <span className="flex items-center gap-1">
+                                                    <Calendar className="h-3 w-3" />
+                                                    {new Date(interview.scheduled_at).toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                    })}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Clock className="h-3 w-3" />
+                                                    {new Date(interview.scheduled_at).toLocaleTimeString('en-US', {
+                                                        hour: 'numeric',
+                                                        minute: '2-digit',
+                                                    })}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="mt-4 rounded-2xl bg-base-300/50 p-5">
+                                    <p className="font-headline mt-1 font-bold text-base-content text-sm">
+                                        No upcoming interviews
+                                    </p>
+                                    <p className="text-xs text-base-content/70">
+                                        Schedule interviews from your application pages.
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
