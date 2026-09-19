@@ -35,7 +35,7 @@ export function AppSidebar() {
                 </div>
                 <div>
                     <p className="font-headline text-lg font-bold leading-tight text-primary">
-                        JobTracker
+                        applyd
                     </p>
                     <p className="font-label text-xs text-base-content/50 tracking-wide uppercase">
                         Stay organized
