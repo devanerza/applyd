@@ -38,7 +38,7 @@ export default function PageHeader({
                                 value={searchValue}
                                 onChange={(e) => onSearchChange(e.target.value)}
                                 placeholder={searchPlaceholder}
-                                className="w-full rounded-full border border-base-300 bg-base-200 py-2 pl-9 pr-4 text-sm outline-none focus:border-primary text-base-content placeholder:text-base-content/40"
+                                className="w-full rounded-2xl border border-base-300 bg-base-200 py-2 pl-9 pr-4 text-sm outline-none focus:border-primary text-base-content placeholder:text-base-content/40"
                             />
                         </div>
                     </form>
