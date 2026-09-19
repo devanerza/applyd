@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\Activity;
+use App\Models\Interview;
 use App\Actions\DetermineApplicationHealth;
+use App\Actions\DetermineNextAction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -34,9 +36,17 @@ class ApplicationController extends Controller
             ->limit(4)
             ->get();
 
+        $upcomingInterviews = Interview::where('user_id', auth()->id())
+            ->where('scheduled_at', '>=', now())
+            ->with('application:id,company_name,role_title')
+            ->orderBy('scheduled_at', 'asc')
+            ->limit(5)
+            ->get();
+
         return Inertia::render('Dashboard/Index', [
             'summary' => $summary,
             'needsAttention' => $needsAttention,
+            'upcomingInterviews' => $upcomingInterviews,
         ]);
     }
 
@@ -132,14 +142,22 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->load('activities');
+        $application->load(['activities', 'interviews' => function ($query) {
+            $query->orderBy('scheduled_at', 'desc');
+        }]);
+
+        $healthCalculator = new DetermineApplicationHealth();
+        $nextActionCalculator = new DetermineNextAction();
+
+        $nextActionMessage = $nextActionCalculator->execute($application);
 
         return Inertia::render('Applications/Show', [
             'application' => $application,
-            'nextAction' => [
-                'title' => 'Follow up in 2 days',
+            'health' => $healthCalculator->execute($application),
+            'nextAction' => $nextActionMessage ? [
+                'title' => $nextActionMessage,
                 'description' => 'Send a polite check-in email to the hiring manager.',
-            ],
+            ] : null,
         ]);
     }
 
