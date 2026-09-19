@@ -1,5 +1,8 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
+    "name": "applyd",
+    "version": "1.0.0",
+    "description": "An intelligent job application tracker",
     "private": true,
     "type": "module",
     "scripts": {

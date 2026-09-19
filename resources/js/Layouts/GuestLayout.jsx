@@ -5,7 +5,7 @@ export default function GuestLayout({ children }) {
         <div className="flex min-h-screen flex-col items-center bg-base-200 pt-6 sm:justify-center sm:pt-0">
             <div>
                 <Link href="/" className="font-headline text-3xl font-bold">
-                    Stride
+                    applyd
                 </Link>
             </div>
 

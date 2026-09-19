@@ -1,6 +1,6 @@
 # AGENTS.md — Job Application Tracker Rebuild Plan
 
-This document defines the complete rebuild of the Job Application Tracker ("Stride") based on `PRD.md`. It maps every change needed across database, backend, and frontend phases, with specific file-level instructions.
+This document defines the complete rebuild of the Job Application Tracker ("applyd") based on `PRD.md`. It maps every change needed across database, backend, and frontend phases, with specific file-level instructions.
 
 **Current state:** ~15-20% complete. Basic CRUD works, but the core intelligence layer (follow-up engine, ghosting detection, health states, action dashboard) is unbuilt. The UI library is still shadcn/Radix — must switch to daisyUI. Many files have bugs, commented-out code, and incomplete implementations.
 

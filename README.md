@@ -1,10 +1,10 @@
-# Stride — Job Application Tracker
+# applyd — Job Application Tracker
 
 An intelligent job application tracker that tells you what needs attention, when to follow up, and whether an opportunity has gone cold.
 
-## Why Stride?
+## Why applyd?
 
-Job hunting is stressful. Tracking applications in spreadsheets is tedious and gives you zero intelligence. Stride continuously interprets the state of your applications and surfaces what needs action **today** — so you can focus on landing the job, not managing the spreadsheet.
+Job hunting is stressful. Tracking applications in spreadsheets is tedious and gives you zero intelligence. applyd continuously interprets the state of your applications and surfaces what needs action **today** — so you can focus on landing the job, not managing the spreadsheet.
 
 ## Features
 
@@ -63,8 +63,8 @@ Every interaction is logged chronologically:
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/stride.git
-cd stride
+git clone https://github.com/yourusername/applyd.git
+cd applyd
 ```
 
 2. Install dependencies
@@ -139,7 +139,7 @@ database/
 
 ## Design Philosophy
 
-Stride is deliberately **not** a generic productivity tool. It does one thing: help you manage job applications intelligently.
+applyd is deliberately **not** a generic productivity tool. It does one thing: help you manage job applications intelligently.
 
 **What it is:**
 - An intelligent tracker that surfaces what needs action

@@ -1,11 +1,12 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "applyd/applyd",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "An intelligent job application tracker that tells you what needs attention.",
     "keywords": [
         "laravel",
-        "framework"
+        "job-tracker",
+        "applications"
     ],
     "license": "MIT",
     "require": {
