@@ -1,59 +1,178 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Stride — Job Application Tracker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+An intelligent job application tracker that tells you what needs attention, when to follow up, and whether an opportunity has gone cold.
 
-## About Laravel
+## Why Stride?
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Job hunting is stressful. Tracking applications in spreadsheets is tedious and gives you zero intelligence. Stride continuously interprets the state of your applications and surfaces what needs action **today** — so you can focus on landing the job, not managing the spreadsheet.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🎯 Action-Oriented Dashboard
+- **Follow-ups due** — surfaces applications needing a check-in based on real inactivity, not manual reminders
+- **Upcoming interviews** — see what's on your calendar at a glance
+- **Health summaries** — active, waiting, stale, or ghosted applications at a glance
 
-## Learning Laravel
+### 📊 Intelligent Application Tracking
+- **Automatic health states** — each application is classified as healthy, needs attention, stale, or likely ghosted
+- **Smart follow-up windows** — status-aware inactivity detection (7 days for applied, 5 for screening, 3 for interviewing)
+- **Ghosting detection** — stops bothering you about dead leads after prolonged silence
+- **Derived next actions** — the app tells you what to do next, not the other way around
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 📝 Complete Application Records
+- Company, role, location, salary range, employment type
+- Application source tracking (LinkedIn, referrals, job boards)
+- Recruiter contact information
+- Notes and custom fields
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 📅 Activity Timeline
+Every interaction is logged chronologically:
+- Application submitted, emails sent/received
+- Recruiter contacts, screening calls
+- Status changes (automatically logged as milestones)
+- Follow-ups, notes, and observations
 
-## Laravel Sponsors
+### 🎤 Interview Management
+- Schedule and track interviews (technical, behavioral, screening)
+- Interviewer details and meeting links
+- Preparation checklists
+- Past vs. upcoming interview distinction
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📈 Insights (Coming Soon)
+- Application funnel visualization
+- Response and interview conversion rates
+- Source effectiveness analysis
 
-### Premium Partners
+## Tech Stack
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- **Backend:** Laravel 12, PHP 8.2
+- **Frontend:** React 18, Inertia.js
+- **UI:** daisyUI (Tailwind CSS)
+- **Database:** MySQL
+- **Icons:** Lucide React
+
+## Installation
+
+### Prerequisites
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- MySQL
+
+### Setup
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/stride.git
+cd stride
+```
+
+2. Install dependencies
+```bash
+composer install
+npm install
+```
+
+3. Configure environment
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+4. Set up database
+Update `.env` with your database credentials, then:
+```bash
+php artisan migrate
+```
+
+5. Build assets
+```bash
+npm run build
+```
+
+6. Start the server
+```bash
+php artisan serve
+```
+
+Visit `http://localhost:8000`
+
+## Development
+
+### Running dev server
+```bash
+npm run dev
+php artisan serve
+```
+
+### Running tests
+```bash
+php artisan test
+```
+
+### Code style
+```bash
+./vendor/bin/pint
+```
+
+## Project Structure
+
+```
+app/
+├── Actions/              # Single-purpose domain operations
+│   ├── DetermineApplicationHealth.php
+│   ├── DetermineNextAction.php
+│   └── EvaluateGhostingStatus.php
+├── Http/Controllers/     # Thin HTTP handlers
+├── Models/              # Eloquent models
+└── Services/            # Multi-step business logic
+
+resources/js/
+├── Components/          # Shared React components
+├── Layouts/            # Page layouts
+└── Pages/              # Inertia pages
+
+database/
+├── migrations/         # Database schema
+└── factories/          # Test data generators
+```
+
+## Design Philosophy
+
+Stride is deliberately **not** a generic productivity tool. It does one thing: help you manage job applications intelligently.
+
+**What it is:**
+- An intelligent tracker that surfaces what needs action
+- A timeline of every interaction
+- A decision-support system for your job search
+
+**What it's not:**
+- A Notion clone with custom fields and databases
+- A CRM for managing recruiter relationships at scale
+- A calendar app (only tracks application and interview dates)
+- A job board (it tracks applications, not job listings)
+
+## Roadmap
+
+- [x] Application CRUD with status lifecycle
+- [x] Activity timeline
+- [x] Follow-up engine with status-aware windows
+- [x] Application health states
+- [x] Interview management
+- [x] Dashboard with action items
+- [ ] User-configurable follow-up windows
+- [ ] Email draft templates
+- [ ] Analytics and insights dashboard
+- [ ] Export to CSV/PDF
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+This is a personal project rebuild, but suggestions and bug reports are welcome. Open an issue or submit a PR.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+Built with Laravel and React. Designed to reduce job search anxiety, one follow-up at a time.
