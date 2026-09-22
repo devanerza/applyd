@@ -30,12 +30,10 @@ export function AppSidebar() {
         <>
         <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col border-r border-neutral-800 bg-base-100/10 px-4 py-6 overflow-hidden">
             <div className="mb-8 flex items-center gap-2 px-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-                    <Briefcase className="h-5 w-5 text-primary-content" />
-                </div>
                 <div>
-                    <p className="font-headline text-lg font-bold leading-tight text-primary">
-                        applyd
+                    <p className="font-headline text-xl
+                     font-bold leading-tight text-primary">
+                        Applyd
                     </p>
                     <p className="font-label text-xs text-base-content/50 tracking-wide uppercase">
                         Stay organized
