@@ -16,25 +16,33 @@ class ApplicationController extends Controller
     {
         $query = Application::where('user_id', auth()->id());
 
-        // ponytail: counts/health are placeholders until Phase 2 wires
-        // real health + next-action derivation; upgrade to Action classes then.
+        $allActiveApps = (clone $query)
+            ->whereNotIn('status', ['rejected', 'withdrawn', 'ghosted'])
+            ->with('interviews')
+            ->get();
+
+        $healthAction = app(DetermineApplicationHealth::class);
+        $nextActionDeterminer = app(DetermineNextAction::class);
+
+        $needsAttentionApps = $allActiveApps->filter(function ($app) use ($healthAction) {
+            return $healthAction->execute($app) === 'needs_attention';
+        })->take(4);
+
+        $staleApps = $allActiveApps->filter(function ($app) use ($healthAction) {
+            return $healthAction->execute($app) === 'stale';
+        });
+
         $summary = [
-            'active' => (clone $query)
-                ->whereNotIn('status', ['rejected', 'withdrawn', 'ghosted'])
-                ->count(),
+            'active' => $allActiveApps->count(),
             'waiting' => (clone $query)
                 ->whereIn('status', ['applied', 'screening'])
                 ->count(),
             'ghosted' => (clone $query)
                 ->where('status', 'ghosted')
                 ->count(),
+            'needs_attention' => $needsAttentionApps->count(),
+            'stale' => $staleApps->count(),
         ];
-
-        $needsAttention = (clone $query)
-            ->whereNotIn('status', ['rejected', 'withdrawn', 'ghosted'])
-            ->orderBy('last_activity_at', 'asc')
-            ->limit(4)
-            ->get();
 
         $upcomingInterviews = Interview::where('user_id', auth()->id())
             ->where('scheduled_at', '>=', now())
@@ -45,7 +53,7 @@ class ApplicationController extends Controller
 
         return Inertia::render('Dashboard/Index', [
             'summary' => $summary,
-            'needsAttention' => $needsAttention,
+            'needsAttention' => $needsAttentionApps->values(),
             'upcomingInterviews' => $upcomingInterviews,
         ]);
     }
@@ -67,6 +75,11 @@ class ApplicationController extends Controller
 
         if ($source = $request->input('source')) {
             $query->where('source', $source);
+        }
+
+        if ($request->boolean('follow_up_due')) {
+            $query->whereNotNull('follow_up_at')
+                  ->whereDate('follow_up_at', '<=', today());
         }
 
         $applications = $query->orderBy('last_activity_at', 'desc')
@@ -252,5 +265,21 @@ class ApplicationController extends Controller
         }
 
         return back();
+    }
+
+    public function snooze(Request $request, Application $application)
+    {
+        if ($application->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'days' => 'required|integer|min:1|max:30',
+        ]);
+
+        $application->follow_up_at = now()->addDays($validated['days']);
+        $application->save();
+
+        return back()->with('success', "Follow-up snoozed for {$validated['days']} days.");
     }
 }
