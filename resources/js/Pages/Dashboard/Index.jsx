@@ -174,22 +174,12 @@ export default function Dashboard({ summary, needsAttention, upcomingInterviews 
                                                     </td>
                                                     <td className="py-3 text-right">
                                                         <div className="flex items-center justify-end gap-2">
-                                                            {(app.recruiter_name || app.recruiter_email) ? (
-                                                                <Link
-                                                                    href={route('applications.show', app.id)}
-                                                                    className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors"
-                                                                >
-                                                                    Follow up
-                                                                </Link>
-                                                            ) : (
-                                                                <button
-                                                                    disabled
-                                                                    title="Add recruiter contact to enable follow-ups"
-                                                                    className="inline-flex items-center gap-1.5 rounded-full bg-base-300 px-3 py-1.5 text-xs font-semibold text-base-content/60 cursor-not-allowed opacity-50"
-                                                                >
-                                                                    Follow up
-                                                                </button>
-                                                            )}
+                                                            <Link
+                                                                href={route('applications.show', app.id)}
+                                                                className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors"
+                                                            >
+                                                                Follow up
+                                                            </Link>
                                                             <button
                                                                 onClick={() => handleIgnore(app.id)}
                                                                 className="inline-flex items-center gap-1.5 rounded-full bg-base-300/50 px-3 py-1.5 text-xs font-semibold text-base-content/70 hover:bg-base-300 transition-colors"
