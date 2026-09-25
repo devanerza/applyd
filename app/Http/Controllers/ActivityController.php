@@ -47,6 +47,10 @@ class ActivityController extends Controller
 
         $activity->delete();
 
+        $application->last_activity_at = $application->activities()
+            ->max('activity_date') ?? now();
+        $application->save();
+
         return redirect()->back()->with('success', 'Activity deleted successfully.');
     }
 }
