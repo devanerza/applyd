@@ -282,4 +282,25 @@ class ApplicationController extends Controller
 
         return back()->with('success', "Follow-up snoozed for {$validated['days']} days.");
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q', '');
+        
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $results = Application::where('user_id', auth()->id())
+            ->where(function ($q) use ($query) {
+                $q->where('company_name', 'like', "%{$query}%")
+                  ->orWhere('role_title', 'like', "%{$query}%")
+                  ->orWhere('location', 'like', "%{$query}%");
+            })
+            ->select('id', 'company_name', 'role_title', 'status', 'location')
+            ->limit(8)
+            ->get();
+
+        return response()->json($results);
+    }
 }

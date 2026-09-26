@@ -2,6 +2,7 @@ import { Head, Link, usePage, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import StatusDropdown from '@/Components/StatusDropdown';
 import PageHeader from '@/Components/PageHeader';
+import AddApplicationModal from '../Applications/Components/AddApplicationModal';
 import {
     CheckCircle2,
     MessageCircle,
@@ -19,6 +20,7 @@ export default function Dashboard({ summary, needsAttention, upcomingInterviews 
 
     const [search, setSearch] = useState('');
     const [ignoredIds, setIgnoredIds] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleIgnore = (id) => {
         setIgnoredIds((prev) => [...prev, id]);
@@ -73,6 +75,7 @@ export default function Dashboard({ summary, needsAttention, upcomingInterviews 
                     onSearchChange={setSearch}
                     onSearchSubmit={() => router.get(route('applications.index'), { search }, { preserveState: true, preserveScroll: true })}
                     searchPlaceholder="Search applications..."
+                    enableLiveSearch={true}
                 />
 
                 {/* Stat cards */}
@@ -126,12 +129,13 @@ export default function Dashboard({ summary, needsAttention, upcomingInterviews 
                             {visible.length === 0 ? (
                                 <div className="rounded-3xl border-2 border-dashed border-base-300 p-8 text-center">
                                     <p className="mb-2 text-lg font-bold text-base-content/80">No applications need attention</p>
-                                    <Link
-                                        href={route('applications.create')}
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsModalOpen(true)}
                                         className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-content hover:bg-primary/90"
                                     >
                                         Create application
-                                    </Link>
+                                    </button>
                                 </div>
                             ) : (
                                 <div className="overflow-x-auto">
@@ -255,6 +259,10 @@ export default function Dashboard({ summary, needsAttention, upcomingInterviews 
                     </div>
                 </div>
             </div>
+            <AddApplicationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </AuthenticatedLayout>
     );
 }
