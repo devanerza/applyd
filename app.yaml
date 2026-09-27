@@ -3,6 +3,7 @@ name: applyd
 package: .
 build:
   context: .
+  dockerfile: Dockerfile
 capabilities:
   database:
     engine: mysql 
