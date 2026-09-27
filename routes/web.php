@@ -6,6 +6,13 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\AnalyticsController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+Route::get('/', function () {
+    return auth()->check() 
+        ? redirect()->route('dashboard')
+        : Inertia::render('Welcome');
+})->name('welcome');
 
 Route::get('/dashboard', [ApplicationController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])

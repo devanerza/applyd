@@ -21,71 +21,71 @@ export default function Register() {
             <Head title="Register" />
 
             <form onSubmit={submit} className="space-y-4">
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text font-label text-xs tracking-wide uppercase">Name</span>
-                    </label>
-                    <input
-                        type="text"
-                        className="input input-bordered w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        autoFocus
-                        autoComplete="name"
-                    />
-                    {errors.name && <p className="text-error text-xs mt-1">{errors.name}</p>}
-                </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text font-label text-xs tracking-wide uppercase">Name</span>
+                                </label>
+                                <input
+                                type="text"
+                                className="input input-bordered w-full"
+                                value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
+                                    autoFocus
+                                    autoComplete="name"
+                                />
+                                {errors.name && <p className="text-error text-xs mt-1">{errors.name}</p>}
+                            </div>
 
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text font-label text-xs tracking-wide uppercase">Email</span>
-                    </label>
-                    <input
-                        type="email"
-                        className="input input-bordered w-full"
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                        autoComplete="username"
-                    />
-                    {errors.email && <p className="text-error text-xs mt-1">{errors.email}</p>}
-                </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text font-label text-xs tracking-wide uppercase">Email</span>
+                                </label>
+                                <input
+                                type="email"
+                                className="input input-bordered w-full"
+                                value={data.email}
+                                    onChange={(e) => setData('email', e.target.value)}
+                                    autoComplete="username"
+                                />
+                                {errors.email && <p className="text-error text-xs mt-1">{errors.email}</p>}
+                            </div>
 
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text font-label text-xs tracking-wide uppercase">Password</span>
-                    </label>
-                    <input
-                        type="password"
-                        className="input input-bordered w-full"
-                        value={data.password}
-                        onChange={(e) => setData('password', e.target.value)}
-                        autoComplete="new-password"
-                    />
-                    {errors.password && <p className="text-error text-xs mt-1">{errors.password}</p>}
-                </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text font-label text-xs tracking-wide uppercase">Password</span>
+                                </label>
+                                <input
+                                type="password"
+                                className="input input-bordered w-full"
+                                value={data.password}
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    autoComplete="new-password"
+                                />
+                                {errors.password && <p className="text-error text-xs mt-1">{errors.password}</p>}
+                            </div>
 
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text font-label text-xs tracking-wide uppercase">Confirm Password</span>
-                    </label>
-                    <input
-                        type="password"
-                        className="input input-bordered w-full"
-                        value={data.password_confirmation}
-                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                        autoComplete="new-password"
-                    />
-                </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text font-label text-xs tracking-wide uppercase">Confirm Password</span>
+                                </label>
+                                <input
+                                type="password"
+                                className="input input-bordered w-full"
+                                value={data.password_confirmation}
+                                    onChange={(e) => setData('password_confirmation', e.target.value)}
+                                    autoComplete="new-password"
+                                />
+                            </div>
 
-                <div className="flex items-center justify-end mt-4">
-                    <Link href={route('login')} className="link link-primary text-sm me-4">
-                        Already registered?
-                    </Link>
-                    <button type="submit" className="btn btn-primary" disabled={processing}>
-                        Register
-                    </button>
-                </div>
-            </form>
+                        <div className="flex items-center justify-end mt-4">
+                            <Link href={route('login')} className="link link-primary text-sm me-4">
+                                Already registered?
+                            </Link>
+                            <button type="submit" className="btn btn-primary" disabled={processing}>
+                                Register
+                            </button>
+                        </div>
+                    </form>
         </GuestLayout>
     );
 }
