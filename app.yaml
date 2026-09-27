@@ -1,6 +1,8 @@
 kind: wasmer.io/App.v0
 name: applyd
 package: .
+build:
+  context: .
 capabilities:
   database:
     engine: mysql 
