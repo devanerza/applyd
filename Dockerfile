@@ -1,6 +1,6 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-cli-alpine
 
-WORKDIR /var/www/html
+WORKDIR /app
 
 RUN apk add --no-cache \
     git \
@@ -8,17 +8,20 @@ RUN apk add --no-cache \
     nodejs \
     npm \
     mysql-client \
+    zip \
+    unzip \
     && docker-php-ext-install pdo pdo_mysql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . /var/www/html
+COPY . /app
+
+COPY composer.json composer.lock ./
 
 RUN composer install --no-dev --optimize-autoloader \
     && npm ci \
-    && npm run build \
-    && chown -R www-data:www-data /var/www/html
+    && npm run build
 
-EXPOSE 9000
+EXPOSE 8000
 
-CMD ["php-fpm"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
